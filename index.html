@@ -1,146 +1,397 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Blueline Designs — Home</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blueline Designs</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#05060a;
+  --bg2:#0b0f14;
+  --accent:#2b7bff;
+  --text:#e8edf2;
+  --muted:#9aa4af;
+  --radius:26px;
+  --max:1200px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,system-ui;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* Particle canvas */
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* Layout */
+.wrapper{
+  position:relative;
+  z-index:2;
+  max-width:var(--max);
+  margin:auto;
+  padding:30px;
+}
+
+/* Header */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:60px;
+}
+
+.logo{
+  font-family:Poppins;
+  font-weight:800;
+  font-size:22px;
+  letter-spacing:2px;
+}
+
+.logo span{color:var(--accent)}
+
+nav{
+  display:none;
+  gap:30px;
+  align-items:center;
+}
+
+nav a{
+  text-decoration:none;
+  color:var(--muted);
+  font-weight:600;
+  font-size:13px;
+  letter-spacing:2px;
+  transition:.3s;
+}
+nav a:hover{color:white}
+
+.contact-btn{
+  border:1px solid rgba(43,123,255,.3);
+  padding:10px 18px;
+  border-radius:20px;
+}
+
+/* Hamburger */
+.hamburger{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:rgba(255,255,255,.03);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,.05);
+}
+
+/* Mobile menu */
+.mobile-menu{
+  position:fixed;
+  inset:0;
+  background:rgba(5,6,8,.85);
+  backdrop-filter:blur(12px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  gap:40px;
+  font-size:40px;
+  font-weight:800;
+  letter-spacing:4px;
+  transform:translateY(-100%);
+  transition:.5s cubic-bezier(.2,.8,.2,1);
+  z-index:10;
+}
+.mobile-menu.open{transform:translateY(0)}
+.mobile-menu a{color:#bfc7cf;text-decoration:none}
+
+/* Hero */
+.hero{
+  min-height:80vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:30px;
+}
+
+.hero h1{
+  font-family:Poppins;
+  font-weight:800;
+  font-size:70px;
+  line-height:.95;
+}
+
+.hero h1 span{color:var(--accent)}
+
+.hero p{
+  max-width:600px;
+  color:var(--muted);
+  font-size:16px;
+}
+
+/* Glass card */
+.glass{
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(43,123,255,.15);
+  border-radius:var(--radius);
+  padding:25px;
+  box-shadow:0 10px 50px rgba(0,0,0,.5);
+}
+
+/* Sections */
+section{
+  padding:120px 0;
+}
+
+.section-title{
+  font-family:Poppins;
+  font-weight:800;
+  font-size:50px;
+  margin-bottom:20px;
+}
+.section-title span{color:var(--accent)}
+
+.section-sub{
+  color:var(--muted);
+  margin-bottom:50px;
+  max-width:600px;
+}
+
+/* Cards grid */
+.grid{
+  display:grid;
+  gap:25px;
+}
+
+.card{
+  padding:30px;
+  border-radius:22px;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(43,123,255,.08);
+  transition:.3s;
+}
+.card:hover{transform:translateY(-6px)}
+
+.card h3{
+  font-family:Poppins;
+  margin-bottom:10px;
+}
+
+.card p{color:var(--muted);font-size:14px}
+
+/* Footer */
+footer{
+  text-align:center;
+  padding:60px 0;
+  color:var(--muted);
+  font-size:12px;
+  letter-spacing:4px;
+}
+
+/* Desktop */
+@media(min-width:900px){
+  nav{display:flex}
+  .hamburger{display:none}
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .hero h1{font-size:100px}
+}
+</style>
 </head>
 <body>
-  <canvas id="particle-canvas"></canvas>
 
-  <div class="site container">
-    <header class="header">
-      <div class="brand"><span>J U D A H</span><span class="dot">.</span></div>
+<canvas id="bg"></canvas>
 
-      <nav class="desktop-nav" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="work.html">Work</a>
-        <a href="courses.html">Courses</a>
-        <a href="discord.html">Discord</a>
-        <a href="about.html">About</a>
-        <a class="cta" href="contact.html">Contact</a>
-      </nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home">HOME</a>
+  <a href="#work">WORK</a>
+  <a href="#courses">COURSES</a>
+  <a href="#discord">DISCORD</a>
+  <a href="#about">ABOUT</a>
+</div>
 
-      <button class="hamburger js-menu-toggle" aria-label="Open menu">
-        <svg width="22" height="14" viewBox="0 0 24 16" fill="none"><rect x="0" y="1" width="24" height="2" rx="1" fill="white" opacity="0.9"/><rect x="0" y="7" width="24" height="2" rx="1" fill="white" opacity="0.6"/><rect x="0" y="13" width="24" height="2" rx="1" fill="white" opacity="0.4"/></svg>
-      </button>
-    </header>
+<div class="wrapper">
 
-    <!-- mobile menu overlay -->
-    <div class="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="backdrop"></div>
-      <div class="panel">
-        <button class="hamburger js-menu-toggle" style="position:absolute;right:18px;top:18px;border-radius:12px;">✕</button>
-        <nav>
-          <a href="index.html">HOME</a>
-          <a href="work.html">WORK</a>
-          <a href="courses.html">COURSES</a>
-          <a href="discord.html">DISCORD</a>
-          <a href="about.html">ABOUT</a>
-        </nav>
-      </div>
+<header>
+  <div class="logo">BLUELINE<span>.</span></div>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#work">Work</a>
+    <a href="#courses">Courses</a>
+    <a href="#discord">Discord</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="contact-btn">Contact</a>
+  </nav>
+
+  <div class="hamburger" id="menuBtn">
+    ☰
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <h1>Bringing your <span>vision</span> to life.</h1>
+  <p>
+    High-fidelity visuals, UI systems, brand identity, lighting, automation —
+    crafted for modern digital communities.
+  </p>
+
+  <div class="glass">
+    <h3>Judah's Customs</h3>
+    <p>Professional digital design & advanced systems for creative communities.</p>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <h2 class="section-title">Professional <span>Work</span></h2>
+  <p class="section-sub">Recent projects and client builds.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Graphics</h3>
+      <p>High-fidelity brand visuals and custom assets.</p>
     </div>
 
-    <main>
-      <section class="hero">
-        <div class="hero-left">
-          <h1 class="title reveal">Bringing your <span class="accent">vision</span> to life.</h1>
-          <p class="lead reveal">High-fidelity visual design, motion, and UI systems tailored to elevate your brand identity. We build beautiful, performance-first interfaces for modern teams and creators.</p>
-          <div style="height:18px"></div>
-          <div class="card reveal" aria-hidden="true">
-            <!-- simplified mock dashboard (no discord totals on home) -->
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div style="width:66px;height:66px;border-radius:12px;background:linear-gradient(135deg,#0b2138,#072139);display:flex;align-items:center;justify-content:center;">
-                <!-- small icon -->
-                <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M12 2c2 0 3 1 4 1s2 1 2 2c0 1-1 2-1 3s1 2 1 3c0 1-1 2-1 2h-12s-1-1-1-2c0-1 1-2 1-3s-1-2-1-3c0-1 1-2 2-2s2-1 4-1z" fill="#2b7bff"/></svg>
-              </div>
+    <div class="card">
+      <h3>Liveries</h3>
+      <p>Elite vehicle skins and professional aesthetics.</p>
+    </div>
 
-              <div>
-                <div style="font-weight:800;font-size:16px;">Judah's Customs</div>
-                <div style="font-size:12px;color:var(--muted);margin-top:6px">Bringing your vision to life</div>
-              </div>
-            </div>
-            <div style="margin-top:18px;display:flex;gap:12px;">
-              <div style="flex:1;background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;text-align:center">
-                <div style="font-size:11px;color:var(--muted)">ONLINE</div>
-                <div style="font-weight:800;font-size:20px;color:var(--accent)">—</div>
-              </div>
-              <div style="flex:1;background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;text-align:center">
-                <div style="font-size:11px;color:var(--muted)">TOTAL</div>
-                <div style="font-weight:800;font-size:20px;color:#fff">—</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-right reveal center">
-          <!-- small decorative blue orb -->
-          <div style="width:220px;height:220px;border-radius:20px;background:linear-gradient(180deg, rgba(43,123,255,0.14), rgba(43,123,255,0.06));display:flex;align-items:center;justify-content:center;box-shadow:0 10px 60px rgba(43,123,255,0.06);">
-            <svg width="110" height="110" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#0b2b5a"/><path d="M7 12a5 5 0 0 0 10 0c0-2.8-2.2-4-5-4s-5 1.2-5 4z" fill="#2b7bff" opacity="0.9"/></svg>
-          </div>
-        </div>
-      </section>
-
-      <!-- services grid -->
-      <section class="services container">
-        <article class="service reveal">
-          <div class="icon" aria-hidden="true">
-            <!-- pen icon -->
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 21l3-1 11-11-2-2L5 18l-2 3z" fill="currentColor"/></svg>
-          </div>
-          <h3>Graphics</h3>
-          <p>High-fidelity visual design tailored for your brand identity.</p>
-        </article>
-
-        <article class="service reveal">
-          <div class="icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l2 4h4v12H6V6h4l2-4z" fill="currentColor"/></svg>
-          </div>
-          <h3>Clothing</h3>
-          <p>Premium apparel and textures for your projects and merch.</p>
-        </article>
-
-        <article class="service reveal">
-          <div class="icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-7 9 7v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-7z" fill="currentColor"/></svg>
-          </div>
-          <h3>Liveries</h3>
-          <p>Custom skins and vehicle designs with pro-grade visuals.</p>
-        </article>
-
-        <article class="service reveal">
-          <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2a6 6 0 0 0-6 6v6a6 6 0 0 0 12 0V8a6 6 0 0 0-6-6z" fill="currentColor"/></svg></div>
-          <h3>ELS</h3>
-          <p>Realistic emergency lighting and lighting systems for ER:LC.</p>
-        </article>
-
-        <article class="service reveal">
-          <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H4z" fill="currentColor"/></svg></div>
-          <h3>Photography</h3>
-          <p>Cinematic captures, lighting setup, and composition for in-game scenes.</p>
-        </article>
-
-        <article class="service reveal">
-          <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 8h10v9H7z" fill="currentColor"/></svg></div>
-          <h3>Discord</h3>
-          <p>Server architecture, automation and professional moderation workflows.</p>
-        </article>
-      </section>
-
-      <footer class="center">
-        <div class="reveal">© <span id="year"></span> Judah's Customs</div>
-      </footer>
-    </main>
+    <div class="card">
+      <h3>ELS Systems</h3>
+      <p>Advanced emergency lighting configurations.</p>
+    </div>
   </div>
+</section>
 
-  <script src="script.js"></script>
-  <script>
-    // small inline scripts
-    document.getElementById('year').textContent = new Date().getFullYear();
-    // add reveal class in small delay for hero
-    setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in')), 150);
-  </script>
+<!-- COURSES -->
+<section id="courses">
+  <h2 class="section-title">Courses & <span>Workshops</span></h2>
+  <p class="section-sub">Learn advanced workflows and creative systems.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>UI Motion</h3>
+      <p>Micro interactions, easing and transitions.</p>
+    </div>
+
+    <div class="card">
+      <h3>Lighting Design</h3>
+      <p>Game lighting theory & execution.</p>
+    </div>
+
+    <div class="card">
+      <h3>Server Automation</h3>
+      <p>Professional Discord architecture.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DISCORD -->
+<section id="discord">
+  <h2 class="section-title">Join the <span>Community</span></h2>
+  <p class="section-sub">Connect, preview projects, and get early access.</p>
+
+  <div class="glass">
+    <h3>Discord Server</h3>
+    <p>Click below to join the official Blueline Designs server.</p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2 class="section-title">About <span>Blueline</span></h2>
+  <p class="section-sub">
+    Built on precision, speed, and creative clarity. We focus on
+    detail-driven digital craftsmanship.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Philosophy</h3>
+      <p>Design that guides, informs and inspires.</p>
+    </div>
+
+    <div class="card">
+      <h3>Capabilities</h3>
+      <p>Branding, lighting, UI/UX, automation systems.</p>
+    </div>
+
+    <div class="card">
+      <h3>Mission</h3>
+      <p>Elevate digital communities with premium design.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 BLUELINE DESIGNS
+</footer>
+
+</div>
+
+<script>
+// Mobile Menu
+const btn=document.getElementById("menuBtn");
+const menu=document.getElementById("mobileMenu");
+
+btn.onclick=()=>menu.classList.toggle("open");
+menu.querySelectorAll("a").forEach(link=>{
+  link.onclick=()=>menu.classList.remove("open");
+});
+
+// Particle Background
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
+let w,h;
+function resize(){
+  w=canvas.width=window.innerWidth;
+  h=canvas.height=window.innerHeight;
+}
+resize();
+window.onresize=resize;
+
+let particles=[];
+for(let i=0;i<40;i++){
+  particles.push({
+    x:Math.random()*w,
+    y:Math.random()*h,
+    r:Math.random()*3+1,
+    dx:(Math.random()-.5)*.5,
+    dy:(Math.random()-.5)*.5
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,w,h);
+  particles.forEach(p=>{
+    p.x+=p.dx;
+    p.y+=p.dy;
+    if(p.x<0||p.x>w)p.dx*=-1;
+    if(p.y<0||p.y>h)p.dy*=-1;
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle="rgba(43,123,255,.4)";
+    ctx.fill();
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
 </body>
 </html>
