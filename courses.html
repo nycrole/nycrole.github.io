@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blueline Designs — Courses</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="particle-canvas"></canvas>
+  <div class="site container">
+    <header class="header">
+      <div class="brand"><span>J U D A H</span><span class="dot">.</span></div>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="work.html">Work</a>
+        <a href="courses.html">Courses</a>
+        <a href="discord.html">Discord</a>
+        <a href="about.html">About</a>
+        <a class="cta" href="contact.html">Contact</a>
+      </nav>
+      <button class="hamburger js-menu-toggle" aria-label="Open menu">☰</button>
+    </header>
+
+    <div class="mobile-menu"><div class="backdrop"></div><div class="panel"><button class="hamburger js-menu-toggle" style="position:absolute;right:18px;top:18px;border-radius:12px;">✕</button><nav><a href="index.html">HOME</a><a href="work.html">WORK</a><a href="courses.html">COURSES</a><a href="discord.html">DISCORD</a><a href="about.html">ABOUT</a></nav></div></div>
+
+    <main>
+      <section style="padding:56px 0;">
+        <h2 class="title reveal">Courses &amp; <span class="accent">Workshops</span></h2>
+        <p class="lead reveal">Self-paced tutorials and live workshops on design, lighting, and server management.</p>
+
+        <div style="display:grid;gap:18px;margin-top:32px;">
+          <a class="card reveal" href="#">
+            <div style="font-weight:800;font-size:18px">UI Motion Fundamentals</div>
+            <div style="color:var(--muted);margin-top:8px">Principles of easing, micro-interactions and story-driven motion.</div>
+          </a>
+
+          <a class="card reveal" href="#">
+            <div style="font-weight:800;font-size:18px">Lighting & VFX for Games</div>
+            <div style="color:var(--muted);margin-top:8px">How to create believable lights and VFX without impacting runtime performance.</div>
+          </a>
+        </div>
+      </section>
+
+      <footer class="center">
+        <div class="reveal">© <span id="year3"></span> Judah's Customs</div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>document.getElementById('year3').textContent = new Date().getFullYear(); setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in')),150);</script>
+</body>
+</html>
