@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blueline Designs — Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="site container">
+    <header class="header">
+      <div class="brand"><span>J U D A H</span><span class="dot">.</span></div>
+
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="work.html">Work</a>
+        <a href="courses.html">Courses</a>
+        <a href="discord.html">Discord</a>
+        <a href="about.html">About</a>
+        <a class="cta" href="contact.html">Contact</a>
+      </nav>
+
+      <button class="hamburger js-menu-toggle" aria-label="Open menu">
+        <svg width="22" height="14" viewBox="0 0 24 16" fill="none"><rect x="0" y="1" width="24" height="2" rx="1" fill="white" opacity="0.9"/><rect x="0" y="7" width="24" height="2" rx="1" fill="white" opacity="0.6"/><rect x="0" y="13" width="24" height="2" rx="1" fill="white" opacity="0.4"/></svg>
+      </button>
+    </header>
+
+    <!-- mobile menu overlay -->
+    <div class="mobile-menu" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="backdrop"></div>
+      <div class="panel">
+        <button class="hamburger js-menu-toggle" style="position:absolute;right:18px;top:18px;border-radius:12px;">✕</button>
+        <nav>
+          <a href="index.html">HOME</a>
+          <a href="work.html">WORK</a>
+          <a href="courses.html">COURSES</a>
+          <a href="discord.html">DISCORD</a>
+          <a href="about.html">ABOUT</a>
+        </nav>
+      </div>
+    </div>
+
+    <main>
+      <section class="hero">
+        <div class="hero-left">
+          <h1 class="title reveal">Bringing your <span class="accent">vision</span> to life.</h1>
+          <p class="lead reveal">High-fidelity visual design, motion, and UI systems tailored to elevate your brand identity. We build beautiful, performance-first interfaces for modern teams and creators.</p>
+          <div style="height:18px"></div>
+          <div class="card reveal" aria-hidden="true">
+            <!-- simplified mock dashboard (no discord totals on home) -->
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:66px;height:66px;border-radius:12px;background:linear-gradient(135deg,#0b2138,#072139);display:flex;align-items:center;justify-content:center;">
+                <!-- small icon -->
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M12 2c2 0 3 1 4 1s2 1 2 2c0 1-1 2-1 3s1 2 1 3c0 1-1 2-1 2h-12s-1-1-1-2c0-1 1-2 1-3s-1-2-1-3c0-1 1-2 2-2s2-1 4-1z" fill="#2b7bff"/></svg>
+              </div>
+
+              <div>
+                <div style="font-weight:800;font-size:16px;">Judah's Customs</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:6px">Bringing your vision to life</div>
+              </div>
+            </div>
+            <div style="margin-top:18px;display:flex;gap:12px;">
+              <div style="flex:1;background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;text-align:center">
+                <div style="font-size:11px;color:var(--muted)">ONLINE</div>
+                <div style="font-weight:800;font-size:20px;color:var(--accent)">—</div>
+              </div>
+              <div style="flex:1;background:rgba(255,255,255,0.02);padding:18px;border-radius:12px;text-align:center">
+                <div style="font-size:11px;color:var(--muted)">TOTAL</div>
+                <div style="font-weight:800;font-size:20px;color:#fff">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-right reveal center">
+          <!-- small decorative blue orb -->
+          <div style="width:220px;height:220px;border-radius:20px;background:linear-gradient(180deg, rgba(43,123,255,0.14), rgba(43,123,255,0.06));display:flex;align-items:center;justify-content:center;box-shadow:0 10px 60px rgba(43,123,255,0.06);">
+            <svg width="110" height="110" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#0b2b5a"/><path d="M7 12a5 5 0 0 0 10 0c0-2.8-2.2-4-5-4s-5 1.2-5 4z" fill="#2b7bff" opacity="0.9"/></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- services grid -->
+      <section class="services container">
+        <article class="service reveal">
+          <div class="icon" aria-hidden="true">
+            <!-- pen icon -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 21l3-1 11-11-2-2L5 18l-2 3z" fill="currentColor"/></svg>
+          </div>
+          <h3>Graphics</h3>
+          <p>High-fidelity visual design tailored for your brand identity.</p>
+        </article>
+
+        <article class="service reveal">
+          <div class="icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l2 4h4v12H6V6h4l2-4z" fill="currentColor"/></svg>
+          </div>
+          <h3>Clothing</h3>
+          <p>Premium apparel and textures for your projects and merch.</p>
+        </article>
+
+        <article class="service reveal">
+          <div class="icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-7 9 7v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-7z" fill="currentColor"/></svg>
+          </div>
+          <h3>Liveries</h3>
+          <p>Custom skins and vehicle designs with pro-grade visuals.</p>
+        </article>
+
+        <article class="service reveal">
+          <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2a6 6 0 0 0-6 6v6a6 6 0 0 0 12 0V8a6 6 0 0 0-6-6z" fill="currentColor"/></svg></div>
+          <h3>ELS</h3>
+          <p>Realistic emergency lighting and lighting systems for ER:LC.</p>
+        </article>
+
+        <article class="service reveal">
+          <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H4z" fill="currentColor"/></svg></div>
+          <h3>Photography</h3>
+          <p>Cinematic captures, lighting setup, and composition for in-game scenes.</p>
+        </article>
+
+        <article class="service reveal">
+          <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 8h10v9H7z" fill="currentColor"/></svg></div>
+          <h3>Discord</h3>
+          <p>Server architecture, automation and professional moderation workflows.</p>
+        </article>
+      </section>
+
+      <footer class="center">
+        <div class="reveal">© <span id="year"></span> Judah's Customs</div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // small inline scripts
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // add reveal class in small delay for hero
+    setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in')), 150);
+  </script>
+</body>
+</html>
