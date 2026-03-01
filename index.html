@@ -10,26 +10,26 @@
 <style>
 :root{
   --bg:#05060a;
-  --bg2:#0b0f14;
   --accent:#2b7bff;
   --text:#e8edf2;
   --muted:#9aa4af;
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
 body{
   font-family:Inter;
   background:#05060a;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(43,123,255,.08), transparent 40%),
-    radial-gradient(circle at 80% 60%, rgba(43,123,255,.06), transparent 40%);
   color:var(--text);
   overflow:hidden;
   cursor:none;
 }
 
-/* ===== Animated Background Canvas ===== */
+/* ===== Animated Background ===== */
 #bgCanvas{
   position:fixed;
   inset:0;
@@ -37,23 +37,24 @@ body{
   pointer-events:none;
 }
 
-/* ===== Custom Glow Cursor ===== */
+/* ===== Custom Cursor ===== */
 .cursor{
-  width:18px;
-  height:18px;
-  border-radius:50%;
-  background:var(--accent);
   position:fixed;
+  width:34px;
+  height:34px;
   pointer-events:none;
-  box-shadow:0 0 25px var(--accent),0 0 60px rgba(43,123,255,.6);
-  transform:translate(-50%,-50%);
   z-index:9999;
-  transition:transform .08s ease, width .2s, height .2s;
+  transform:translate(-15%, -15%);
+  transition:transform .05s ease;
+  filter:
+    drop-shadow(0 0 8px rgba(43,123,255,.9))
+    drop-shadow(0 0 18px rgba(43,123,255,.7))
+    drop-shadow(0 0 30px rgba(43,123,255,.5));
 }
 
-.cursor.hover{
-  width:28px;
-  height:28px;
+.cursor img{
+  width:100%;
+  height:100%;
 }
 
 /* ===== Navbar ===== */
@@ -62,10 +63,9 @@ header{
   width:100%;
   display:flex;
   justify-content:space-between;
-  padding:30px 10%;
   align-items:center;
-  z-index:10;
-  background:linear-gradient(to bottom, rgba(5,6,10,.8), transparent);
+  padding:30px 10%;
+  z-index:5;
 }
 
 .logo{
@@ -73,7 +73,10 @@ header{
   font-weight:800;
   font-size:20px;
 }
-.logo span{color:var(--accent)}
+
+.logo span{
+  color:var(--accent);
+}
 
 nav a{
   color:var(--muted);
@@ -83,7 +86,10 @@ nav a{
   transition:.3s;
   cursor:none;
 }
-nav a:hover{color:white}
+
+nav a:hover{
+  color:white;
+}
 
 /* ===== Page System ===== */
 .page{
@@ -94,7 +100,7 @@ nav a:hover{color:white}
   justify-content:center;
   padding:0 10%;
   opacity:0;
-  transform:translateX(40px);
+  transform:translateX(50px);
   transition:.6s cubic-bezier(.2,.8,.2,1);
   pointer-events:none;
   z-index:2;
@@ -111,7 +117,10 @@ h1{
   font-size:90px;
   line-height:.9;
 }
-h1 span{color:var(--accent)}
+
+h1 span{
+  color:var(--accent);
+}
 
 p{
   margin-top:20px;
@@ -123,7 +132,10 @@ p{
 <body>
 
 <canvas id="bgCanvas"></canvas>
-<div class="cursor" id="cursor"></div>
+
+<div class="cursor" id="cursor">
+  <img id="cursorImg" src="https://i.postimg.cc/tTdbjxVj/icons8-mouse-cursor-96.png">
+</div>
 
 <header>
   <div class="logo">BLUELINE<span>.</span></div>
@@ -168,20 +180,28 @@ p{
 </section>
 
 <script>
-/* ===== Cursor ===== */
+/* ===== Cursor Movement ===== */
 const cursor=document.getElementById("cursor");
+const cursorImg=document.getElementById("cursorImg");
+
 document.addEventListener("mousemove",e=>{
   cursor.style.left=e.clientX+"px";
   cursor.style.top=e.clientY+"px";
 });
 
-document.querySelectorAll("a").forEach(link=>{
-  link.addEventListener("mouseenter",()=>cursor.classList.add("hover"));
-  link.addEventListener("mouseleave",()=>cursor.classList.remove("hover"));
+/* Swap to hand on hover */
+document.querySelectorAll("a, button").forEach(el=>{
+  el.addEventListener("mouseenter",()=>{
+    cursorImg.src="https://i.postimg.cc/28s04XKT/icons8-hand-cursor-90.png";
+  });
+  el.addEventListener("mouseleave",()=>{
+    cursorImg.src="https://i.postimg.cc/tTdbjxVj/icons8-mouse-cursor-96.png";
+  });
 });
 
 /* ===== Page Switching ===== */
 const pages=document.querySelectorAll(".page");
+
 document.querySelectorAll("nav a").forEach(btn=>{
   btn.addEventListener("click",()=>{
     pages.forEach(p=>p.classList.remove("active"));
@@ -189,11 +209,12 @@ document.querySelectorAll("nav a").forEach(btn=>{
   });
 });
 
-/* ===== Animated Particle Background ===== */
+/* ===== Particle Background ===== */
 const canvas=document.getElementById("bgCanvas");
 const ctx=canvas.getContext("2d");
 
 let w,h;
+
 function resize(){
   w=canvas.width=window.innerWidth;
   h=canvas.height=window.innerHeight;
@@ -202,18 +223,20 @@ resize();
 window.addEventListener("resize",resize);
 
 let particles=[];
-for(let i=0;i<60;i++){
+
+for(let i=0;i<70;i++){
   particles.push({
     x:Math.random()*w,
     y:Math.random()*h,
-    r:Math.random()*2+1,
-    dx:(Math.random()-.5)*0.4,
-    dy:(Math.random()-.5)*0.4
+    r:Math.random()*2+0.5,
+    dx:(Math.random()-.5)*0.3,
+    dy:(Math.random()-.5)*0.3
   });
 }
 
 function animate(){
   ctx.clearRect(0,0,w,h);
+
   particles.forEach(p=>{
     p.x+=p.dx;
     p.y+=p.dy;
@@ -223,11 +246,15 @@ function animate(){
 
     ctx.beginPath();
     ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle="rgba(43,123,255,.35)";
+    ctx.fillStyle="rgba(43,123,255,.85)";
+    ctx.shadowColor="rgba(43,123,255,.85)";
+    ctx.shadowBlur=15;
     ctx.fill();
   });
+
   requestAnimationFrame(animate);
 }
+
 animate();
 </script>
 
