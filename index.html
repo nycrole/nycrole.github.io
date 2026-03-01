@@ -25,7 +25,8 @@ body{
   font-family:Inter;
   background:#05060a;
   color:var(--text);
-  overflow:hidden;
+  overflow-x:hidden; /* prevent sideways scroll */
+  overflow-y:auto;   /* allow vertical scroll */
   cursor:none;
 }
 
@@ -95,10 +96,10 @@ nav a:hover{
 .page{
   position:absolute;
   inset:0;
+  padding:140px 10% 80px; /* top space for navbar */
   display:flex;
   flex-direction:column;
-  justify-content:center;
-  padding:0 10%;
+  justify-content:flex-start; /* start at top instead of center */
   opacity:0;
   transform:translateX(50px);
   transition:.6s cubic-bezier(.2,.8,.2,1);
@@ -214,6 +215,19 @@ p{
 <section class="page active" id="home">
   <h1>Bringing your <span>vision</span> to life.</h1>
   <p>High-fidelity visuals, UI systems, and automation crafted for modern communities.</p>
+<div class="card-container" style="margin-top: 10px;">
+  <div class="service-card">
+  <img src="your-icon.png" class="service-icon">
+
+  <div class="service-title">
+    Graphics
+  </div>
+
+  <div class="service-desc">
+    High-fidelity visual design tailored for your brand identity.
+  </div>
+</div>
+</div>
 </section>
 
 <section class="page" id="work">
