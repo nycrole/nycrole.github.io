@@ -1,326 +1,315 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blueline Design's</title>
-<link rel="icon" type="image/png" href="https://i.postimg.cc/zGSPqYzZ/Blueline-Official-Logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<title>Blueline Product Test</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --bg:#05060a;
-  --accent:#2b7bff;
-  --text:#e8edf2;
+  --bg2:#0a1020;
+  --card:#0b1220cc;
+  --text:#eef2f7;
   --muted:#9aa4af;
+  --accent:#2b7bff;
+  --border:rgba(255,255,255,.08);
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+html[data-theme="light"]{
+  --bg:#f6f8fb;
+  --bg2:#eef3f9;
+  --card:rgba(255,255,255,.9);
+  --text:#101828;
+  --muted:#5b6472;
+  --accent:#2563eb;
+  --border:rgba(0,0,0,.08);
 }
+
+*{margin:0;padding:0;box-sizing:border-box;}
 
 body{
   font-family:Inter;
-  background:#05060a;
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
   color:var(--text);
-  overflow-x:hidden; /* prevent sideways scroll */
-  overflow-y:auto;   /* allow vertical scroll */
-  cursor:none;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
 
-/* ===== Animated Background ===== */
-#bgCanvas{
-  position:fixed;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-}
-
-/* ===== Custom Cursor ===== */
-.cursor{
-  position:fixed;
-  width:34px;
-  height:34px;
-  pointer-events:none;
-  z-index:9999;
-  transform:translate(-15%, -15%);
-  transition:transform .05s ease;
-  filter:
-    drop-shadow(0 0 8px rgba(43,123,255,.9))
-    drop-shadow(0 0 18px rgba(43,123,255,.7))
-    drop-shadow(0 0 30px rgba(43,123,255,.5));
-}
-
-.cursor img{
-  width:100%;
-  height:100%;
-}
-
-/* ===== Navbar ===== */
-header{
-  position:fixed;
-  width:100%;
+/* HEADER */
+.header{
+  position:absolute;
+  top:20px;
+  left:20px;
+  right:20px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:30px 10%;
-  z-index:5;
 }
 
 .logo{
   font-family:Poppins;
   font-weight:800;
-  font-size:20px;
 }
 
-.logo span{
-  color:var(--accent);
+.logo span{color:var(--accent);}
+
+.theme-btn{
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  padding:10px 14px;
+  border-radius:999px;
+  cursor:pointer;
 }
 
-nav a{
+/* PRODUCT CARD */
+.product{
+  max-width:420px;
+  width:100%;
+  padding:30px;
+  border-radius:24px;
+  background:var(--card);
+  border:1px solid var(--border);
+  text-align:center;
+}
+
+.product h2{
+  font-family:Poppins;
+  font-size:28px;
+}
+
+.product p{
+  margin-top:10px;
   color:var(--muted);
-  text-decoration:none;
-  margin-left:25px;
-  font-weight:600;
-  transition:.3s;
-  cursor:none;
 }
 
-nav a:hover{
+.buy-btn{
+  margin-top:20px;
+  padding:12px;
+  width:100%;
+  border:none;
+  border-radius:999px;
+  background:var(--accent);
   color:white;
+  font-weight:600;
+  cursor:pointer;
 }
 
-/* ===== Page System ===== */
-.page{
-  position:absolute;
+/* MODAL */
+.modal{
+  position:fixed;
   inset:0;
-  padding:140px 10% 80px; /* top space for navbar */
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal.show{display:flex;}
+
+.modal-content{
+  width:min(900px,100%);
+  background:var(--card);
+  border-radius:24px;
+  padding:20px;
+}
+
+/* EDITOR */
+.editor{
+  display:grid;
+  grid-template-columns:1fr 300px;
+  gap:20px;
+}
+
+.canvas-wrap{
+  aspect-ratio:6/8;
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+}
+
+canvas{
+  width:100%;
+  height:100%;
+}
+
+.controls{
   display:flex;
   flex-direction:column;
-  justify-content:flex-start; /* start at top instead of center */
-  opacity:0;
-  transform:translateX(50px);
-  transition:.6s cubic-bezier(.2,.8,.2,1);
-  pointer-events:none;
-  z-index:2;
+  gap:12px;
 }
 
-.page.active{
-  opacity:1;
-  transform:translateX(0);
-  pointer-events:auto;
+.controls input[type="file"]{
+  display:none;
 }
 
-h1{
-  font-family:Poppins;
-  font-size:90px;
-  line-height:.9;
+.upload{
+  padding:10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  text-align:center;
+  cursor:pointer;
 }
 
-h1 span{
-  color:var(--accent);
-}
-
-p{
-  margin-top:20px;
-  max-width:600px;
-  color:var(--muted);
-}
-  .service-card{
-  position:relative;
+.controls input[type="range"]{
   width:100%;
-  max-width:520px;
-  padding:40px;
-  border-radius:28px;
-  background:linear-gradient(145deg,#0a0f1c,#071427);
-  border:1px solid rgba(43,123,255,.25);
-  box-shadow:
-    0 0 0 1px rgba(43,123,255,.05),
-    0 20px 60px rgba(0,0,0,.6),
-    inset 0 0 80px rgba(43,123,255,.06);
-  transition:all .35s ease;
-  overflow:hidden;
-
-  /* 🔒 Prevent layout breaking */
-  box-sizing:border-box;
-  word-wrap:break-word;
-  overflow-wrap:break-word;
 }
 
-.service-card:hover{
-  transform:translateY(-10px);
-  border:1px solid rgba(43,123,255,.6);
-  box-shadow:
-    0 0 30px rgba(43,123,255,.4),
-    0 30px 80px rgba(0,0,0,.7),
-    inset 0 0 100px rgba(43,123,255,.15);
+.advance{
+  margin-top:10px;
+  padding:12px;
+  border:none;
+  border-radius:999px;
+  background:var(--accent);
+  color:white;
+  cursor:pointer;
 }
 
-.service-icon{
-  width:48px;
-  max-width:100%;
-  height:auto;
-  margin-bottom:25px;
-}
-
-.service-title{
-  font-size:clamp(20px, 3vw, 28px);
-  font-weight:600;
-  margin-bottom:15px;
-  color:#ffffff;
-  word-break:break-word;
-}
-
-.service-desc{
-  font-size:clamp(14px, 2vw, 16px);
-  line-height:1.6;
-  color:#9aa4b2;
-  word-break:break-word;
-}
-  @media(max-width:500px){
-  .service-card{
-    padding:25px;
+@media(max-width:700px){
+  .editor{
+    grid-template-columns:1fr;
   }
-}
-  .card-container{
-  display:flex;
-  flex-wrap:wrap;
-  gap:30px;
-  justify-content:center;
 }
 </style>
 </head>
+
 <body>
 
-<canvas id="bgCanvas"></canvas>
-
-<div class="cursor" id="cursor">
-  <img id="cursorImg" src="https://i.postimg.cc/QNRzbtB0/icons8-mouse-cursor-96.png' border='0' alt='icons8-mouse-cursor-96">
-</div>
-
-<header>
+<div class="header">
   <div class="logo"><span>BLUE</span>LINE</div>
-  <nav>
-    <a data-page="home">Home</a>
-    <a data-page="work">Work</a>
-    <a data-page="courses">Courses</a>
-    <a data-page="home" href="https://discord.gg/invite/TSkgcUUQjE" target="_blank">Discord</a>
-    <a data-page="contact">Contact</a>
-  </nav>
-</header>
+  <button class="theme-btn" id="themeBtn">Light Mode</button>
+</div>
 
-<section class="page active" id="home">
-  <h1>Bringing your <span>vision</span> to life.</h1>
-  <p>High-fidelity visuals, UI systems, and automation crafted for modern communities.</p>
-<div class="card-container" style="margin-top: 10px;">
-  <div class="service-card">
-  <img src="your-icon.png" class="service-icon">
+<div class="product">
+  <h2>6x8 Custom Card</h2>
+  <p>Upload your image and customize your design.</p>
+  <button class="buy-btn" id="buyBtn">Buy Now</button>
+</div>
 
-  <div class="service-title">
-    Graphics
-  </div>
+<div class="modal" id="modal">
+  <div class="modal-content">
 
-  <div class="service-desc">
-    High-fidelity visual design tailored for your brand identity.
+    <div id="step1">
+      <div class="editor">
+        <div class="canvas-wrap">
+          <canvas id="canvas" width="600" height="800"></canvas>
+        </div>
+
+        <div class="controls">
+          <label class="upload">
+            Upload Image
+            <input type="file" id="uploadInput">
+          </label>
+
+          <label>X
+            <input type="range" id="x" min="-200" max="200" value="0">
+          </label>
+
+          <label>Y
+            <input type="range" id="y" min="-200" max="200" value="0">
+          </label>
+
+          <label>Size
+            <input type="range" id="scale" min="50" max="200" value="100">
+          </label>
+
+          <button class="advance" id="nextBtn">Advance</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="step2" style="display:none;text-align:center;">
+      <h2>Ready for Checkout</h2>
+      <p style="margin-top:10px;color:var(--muted);">
+        Your design is ready. Hook this into your real checkout later.
+      </p>
+      <button class="advance" id="backBtn">Back</button>
+    </div>
+
   </div>
 </div>
-</div>
-</section>
-
-<section class="page" id="work">
-  <h1>Professional <span>Work</span></h1>
-  <p>Graphics, liveries, advanced ELS systems and precision digital builds.</p>
-</section>
-
-<section class="page" id="courses">
-  <h1>Courses & <span>Workshops</span></h1>
-  <p>Learn lighting systems, UI motion, automation and advanced workflows.</p>
-</section>
-
-<section class="page" id="contact">
-  <h1>Get In <span>Touch</span></h1>
-  <p>Let’s build something powerful together.</p>
-</section>
 
 <script>
-/* ===== Cursor Movement ===== */
-const cursor=document.getElementById("cursor");
-const cursorImg=document.getElementById("cursorImg");
+/* THEME */
+const themeBtn = document.getElementById("themeBtn");
+const root = document.documentElement;
 
-document.addEventListener("mousemove",e=>{
-  cursor.style.left=e.clientX+"px";
-  cursor.style.top=e.clientY+"px";
-});
+themeBtn.onclick = () => {
+  const t = root.getAttribute("data-theme");
+  const newT = t === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", newT);
+  themeBtn.textContent = newT === "dark" ? "Light Mode" : "Dark Mode";
+};
 
-/* Swap to hand on hover */
-document.querySelectorAll("a, button").forEach(el=>{
-  el.addEventListener("mouseenter",()=>{
-    cursorImg.src="https://i.postimg.cc/28s04XKT/icons8-hand-cursor-90.png";
-  });
-  el.addEventListener("mouseleave",()=>{
-    cursorImg.src="https://i.postimg.cc/QNRzbtB0/icons8-mouse-cursor-96.png";
-  });
-});
+/* MODAL */
+const modal = document.getElementById("modal");
+document.getElementById("buyBtn").onclick = () => modal.classList.add("show");
+modal.onclick = e => { if(e.target === modal) modal.classList.remove("show"); };
 
-/* ===== Page Switching ===== */
-const pages=document.querySelectorAll(".page");
+/* CANVAS */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-document.querySelectorAll("nav a").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    pages.forEach(p=>p.classList.remove("active"));
-    document.getElementById(btn.dataset.page).classList.add("active");
-  });
-});
+let img = null;
+let posX=0,posY=0,scale=1;
 
-/* ===== Particle Background ===== */
-const canvas=document.getElementById("bgCanvas");
-const ctx=canvas.getContext("2d");
+function draw(){
+  ctx.clearRect(0,0,600,800);
 
-let w,h;
+  ctx.fillStyle="#111";
+  ctx.fillRect(0,0,600,800);
 
-function resize(){
-  w=canvas.width=window.innerWidth;
-  h=canvas.height=window.innerHeight;
-}
-resize();
-window.addEventListener("resize",resize);
-
-let particles=[];
-
-for(let i=0;i<70;i++){
-  particles.push({
-    x:Math.random()*w,
-    y:Math.random()*h,
-    r:Math.random()*2+0.5,
-    dx:(Math.random()-.5)*0.3,
-    dy:(Math.random()-.5)*0.3
-  });
+  if(img){
+    let w=400*scale;
+    let h=(img.height/img.width)*w;
+    ctx.drawImage(img,100+posX,200+posY,w,h);
+  } else {
+    ctx.fillStyle="#555";
+    ctx.fillText("Upload Image",200,400);
+  }
 }
 
-function animate(){
-  ctx.clearRect(0,0,w,h);
+draw();
 
-  particles.forEach(p=>{
-    p.x+=p.dx;
-    p.y+=p.dy;
+/* UPLOAD */
+document.getElementById("uploadInput").onchange = e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    img=new Image();
+    img.onload=draw;
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+};
 
-    if(p.x<0||p.x>w)p.dx*=-1;
-    if(p.y<0||p.y>h)p.dy*=-1;
+/* CONTROLS */
+document.getElementById("x").oninput=e=>{posX=e.target.value;draw();}
+document.getElementById("y").oninput=e=>{posY=e.target.value;draw();}
+document.getElementById("scale").oninput=e=>{scale=e.target.value/100;draw();}
 
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle="rgba(43,123,255,.85)";
-    ctx.shadowColor="rgba(43,123,255,.85)";
-    ctx.shadowBlur=15;
-    ctx.fill();
-  });
+/* STEPS */
+const step1=document.getElementById("step1");
+const step2=document.getElementById("step2");
 
-  requestAnimationFrame(animate);
-}
+document.getElementById("nextBtn").onclick=()=>{
+  step1.style.display="none";
+  step2.style.display="block";
+};
 
-animate();
+document.getElementById("backBtn").onclick=()=>{
+  step2.style.display="none";
+  step1.style.display="block";
+};
 </script>
 
 </body>
