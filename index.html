@@ -6,36 +6,38 @@
 <title>Surge</title>
 <style>
 :root {
-  --bg-dark: #010f25;
-  --bg-section: #0a1c3d;
+  --bg-dark: #010927;
+  --bg-section: #081c3d;
   --card-bg: rgba(255,255,255,0.05);
   --text: #f1f5f9;
   --muted: #94a3b8;
-  --accent: #5eead4;
-  --accent2: #38bdf8;
-  --shadow: 0 10px 30px rgba(0,0,0,0.5);
+  --accent: #3fa9f5;
+  --accent2: #1e3ff5;
+  --shadow: 0 12px 30px rgba(0,0,0,0.6);
   --radius: 16px;
 }
 
 /* RESET */
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter, sans-serif;}
-body{background: var(--bg-dark); color: var(--text);}
-a{text-decoration:none;color:inherit;}
-img{max-width:100%;display:block;}
+* {margin:0;padding:0;box-sizing:border-box;font-family:Inter, sans-serif;}
+body {background: var(--bg-dark); color: var(--text);}
+a {text-decoration:none;color:inherit;}
+img {max-width:100%;display:block;}
 
 /* NAVBAR */
 .navbar{
   position: fixed; top:0; width:100%; z-index:1000;
   display:flex; justify-content:space-between; align-items:center;
-  padding:20px 40px; background: rgba(0,20,50,0.7); backdrop-filter: blur(12px);
+  padding:20px 40px; background: rgba(0,20,60,0.7); backdrop-filter: blur(14px);
   transition:0.3s;
 }
-.navbar.scrolled{padding:10px 40px; background: rgba(0,20,50,0.9);}
-.logo{font-weight:800;font-size:1.5rem;letter-spacing:2px;}
+.navbar.scrolled{padding:12px 40px; background: rgba(0,20,60,0.95);}
+.logo{font-weight:900;font-size:1.6rem;letter-spacing:2px; color:var(--accent);}
 .nav-links{display:flex;gap:28px;}
 .nav-links a{padding:6px 10px; transition:0.3s; font-weight:500;}
-.nav-links a.active, .nav-links a:hover{color:white; border-radius:6px; background: rgba(94,234,212,0.15);}
-.menu-btn{display:none;font-size:26px;cursor:pointer;}
+.nav-links a.active, .nav-links a:hover{
+  color:white; border-radius:6px; background: rgba(63,169,245,0.15);
+}
+.menu-btn{display:none;font-size:28px;cursor:pointer; color: var(--accent);}
 
 /* MOBILE NAV */
 @media(max-width:768px){
@@ -67,32 +69,32 @@ background:linear-gradient(135deg,var(--accent),var(--accent2));
 }
 .hero p{margin-bottom:25px;}
 .btn{
-padding:14px 28px; border:none; border-radius:12px;
+padding:14px 28px; border:none; border-radius:14px;
 background: linear-gradient(135deg,var(--accent),var(--accent2));
 cursor:pointer;font-weight:700; transition:0.3s;
 }
-.btn:hover{transform:scale(1.05); box-shadow:0 10px 25px rgba(94,234,212,0.4);}
+.btn:hover{transform:scale(1.05); box-shadow:0 12px 30px rgba(63,169,245,0.6);}
 
 /* GRID / CARDS */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:24px;margin-top:30px;
+gap:26px;margin-top:30px;
 }
 .card{
 background: var(--card-bg); border-radius:var(--radius);
-padding:18px; transition:0.3s; backdrop-filter:blur(10px);
+padding:20px; transition:0.3s; backdrop-filter:blur(12px);
 border:1px solid rgba(255,255,255,0.1); text-align:center;
 }
-.card:hover{transform:translateY(-6px); box-shadow:var(--shadow);}
+.card:hover{transform:translateY(-8px); box-shadow:var(--shadow);}
 .card img{border-radius:12px; margin-bottom:12px;}
-.price{font-weight:700; margin:8px 0; font-size:1.1rem;}
+.price{font-weight:700; margin:10px 0; font-size:1.1rem;}
 .card button{
-padding:10px 18px; border:none; border-radius:10px;
+padding:12px 20px; border:none; border-radius:12px;
 background: linear-gradient(135deg,var(--accent),var(--accent2));
 color:#000; font-weight:700; cursor:pointer; transition:0.3s;
 }
-.card button:hover{transform:scale(1.05);box-shadow:0 8px 20px rgba(94,234,212,0.4);}
+.card button:hover{transform:scale(1.05);box-shadow:0 10px 25px rgba(63,169,245,0.5);}
 
 /* ABOUT SECTION */
 .about{
@@ -107,12 +109,12 @@ input,textarea{
 padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.15);
 background:#0a1c3d;color:white; transition:0.3s;
 }
-input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 12px rgba(94,234,212,0.3);}
-.submit-btn{padding:14px; background:linear-gradient(135deg,var(--accent),var(--accent2)); border:none; border-radius:10px; font-weight:700; cursor:pointer; transition:0.3s;}
-.submit-btn:hover{transform:scale(1.05); box-shadow:0 8px 20px rgba(94,234,212,0.4);}
+input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 14px rgba(63,169,245,0.5);}
+.submit-btn{padding:14px; background:linear-gradient(135deg,var(--accent),var(--accent2)); border:none; border-radius:12px; font-weight:700; cursor:pointer; transition:0.3s;}
+.submit-btn:hover{transform:scale(1.05); box-shadow:0 10px 25px rgba(63,169,245,0.5);}
 
 /* FOOTER */
-footer{text-align:center;padding:25px;margin-top:40px;background:#010f25;color:var(--muted);}
+footer{text-align:center;padding:30px;margin-top:40px;background:#010927;color:var(--muted);}
 </style>
 </head>
 <body>
@@ -132,8 +134,8 @@ footer{text-align:center;padding:25px;margin-top:40px;background:#010f25;color:v
 <!-- HOME -->
 <section id="home" class="page active">
   <div class="hero">
-    <h1>Elevate Your Brand</h1>
-    <p>Simple, clean, modern e-commerce experience.</p>
+    <h1>Elevate Your Style</h1>
+    <p>Discover premium designs and high-quality apparel curated for modern brands and individuals who want style that stands out.</p>
     <button class="btn" onclick="showPage('products')">Shop Now</button>
   </div>
 </section>
@@ -147,18 +149,35 @@ footer{text-align:center;padding:25px;margin-top:40px;background:#010f25;color:v
       <h3>Surge Classic Tee</h3>
       <div class="price">$25</div>
       <button>Buy Now</button>
+      <p>A comfortable, stylish t-shirt perfect for everyday wear. Made from premium cotton for a soft feel.</p>
     </div>
     <div class="card">
       <img src="https://m.media-amazon.com/images/I/61bq5U4lO-L._AC_UX385_.jpg" alt="Random Shirt">
       <h3>Surge Hoodie</h3>
       <div class="price">$60</div>
       <button>Buy Now</button>
+      <p>Keep warm in style. Our hoodie combines comfort, durability, and modern design for everyday fashion.</p>
     </div>
     <div class="card">
       <img src="https://m.media-amazon.com/images/I/61bq5U4lO-L._AC_UX385_.jpg" alt="Random Shirt">
       <h3>Surge Cap</h3>
       <div class="price">$20</div>
       <button>Buy Now</button>
+      <p>Classic cap design with adjustable strap. Perfect for sports, streetwear, or casual outings.</p>
+    </div>
+    <div class="card">
+      <img src="https://m.media-amazon.com/images/I/61bq5U4lO-L._AC_UX385_.jpg" alt="Random Shirt">
+      <h3>Surge Premium Tee</h3>
+      <div class="price">$30</div>
+      <button>Buy Now</button>
+      <p>Elevate your wardrobe with this sleek premium tee. Perfect for layering or wearing on its own.</p>
+    </div>
+    <div class="card">
+      <img src="https://m.media-amazon.com/images/I/61bq5U4lO-L._AC_UX385_.jpg" alt="Random Shirt">
+      <h3>Surge Pullover</h3>
+      <div class="price">$65</div>
+      <button>Buy Now</button>
+      <p>Soft, comfortable pullover designed for a casual yet refined look. Ideal for chilly evenings.</p>
     </div>
   </div>
 </section>
@@ -168,15 +187,17 @@ footer{text-align:center;padding:25px;margin-top:40px;background:#010f25;color:v
   <div class="about">
     <div>
       <h2>About Surge</h2>
-      <p>Surge creates clean, modern e-commerce sites with premium design. Perfect for brands that want simplicity and style.</p>
+      <p>Surge is your destination for premium, modern apparel and accessories. We focus on delivering clean, stylish designs that elevate your everyday wardrobe. Whether you’re shopping for casual wear, streetwear, or high-end basics, Surge brings quality and style together seamlessly.</p>
+      <p>Our products are crafted with care, using top-tier materials to ensure comfort, durability, and long-lasting wear. Every piece reflects our dedication to detail and our commitment to giving customers a superior shopping experience.</p>
     </div>
-    <img src="https://via.placeholder.com/400x300" alt="About Image">
+    <img src="https://via.placeholder.com/450x350" alt="About Image">
   </div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact" class="page">
   <h2 style="text-align:center;">Contact Us</h2>
+  <p style="text-align:center; color:var(--muted); margin-bottom:25px;">Have questions? Need assistance? Our team is ready to help. Fill out the form below and we’ll get back to you as soon as possible.</p>
   <form>
     <input type="text" placeholder="Name">
     <input type="email" placeholder="Email">
