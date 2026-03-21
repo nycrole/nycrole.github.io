@@ -1,135 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Custom Apparel Design</title>
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-  <style>
-    /* ================= Base & Reset ================= */
-    * {margin:0; padding:0; box-sizing:border-box;}
-    body {font-family: Arial, sans-serif; line-height:1.6; color:#333;}
-    a {text-decoration:none; color: inherit;}
-    header, footer {background:#111; color:#fff;}
-    .navbar {display:flex; justify-content:space-between; align-items:center; padding:1rem;}
-    .nav-links {display:flex; gap:1rem;}
-    .nav-links a {padding:.5rem 1rem; border-radius:4px; transition:.3s;}
-    .nav-links a:hover {background:#444;}
-    .fa-bars {display:none; cursor:pointer; color:#fff;}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surge - Custom Apparel Designer</title>
 
-    /* ================= Responsive nav ================= */
-    @media(max-width:768px){
-      .nav-links {display:none; flex-direction:column; background:#222; position:absolute; top:60px; right:0; width:200px;}
-      .nav-links.active {display:flex;}
-      .fa-bars {display:block;}
-    }
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
 
-    /* ================= Hero section ================= */
-    .hero {text-align:center; padding:4rem 1rem; background:#f5f5f5;}
-    .hero h1 {font-size:2rem; margin-bottom:1rem;}
-    .hero .btn {background:#111; color:#fff; padding:.75rem 1.5rem; border-radius:5px; display:inline-block; margin-top:1rem;}
+<!-- Font Awesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
-    /* ================= Products grid ================= */
-    .products-page {padding:2rem;}
-    .products-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:2rem;}
-    .product-card {text-align:center; border:1px solid #ddd; padding:1rem; border-radius:5px;}
-    .product-card img {width:100%; height:250px; object-fit:cover;}
+<style>
+/* ===== Base ===== */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',sans-serif;background:#f9f9f9;color:#333;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;border:none;}
 
-    /* ================= Contact form ================= */
-    .contact-page {padding:2rem;}
-    form {display:flex; flex-direction:column; gap:1rem; max-width:400px; margin:auto;}
-    input, textarea {padding:.75rem; border:1px solid #ccc; border-radius:4px; width:100%;}
-    button {padding:.75rem; border:none; background:#111; color:#fff; border-radius:4px; cursor:pointer;}
+/* ===== Navbar ===== */
+header{position:fixed;top:0;left:0;width:100%;background:#111;padding:.75rem 2rem;display:flex;justify-content:space-between;align-items:center;z-index:999;}
+.logo{color:#fff;font-size:1.8rem;font-weight:700;}
+.menu{display:flex;gap:1.5rem;}
+.menu a{color:#fff;padding:.5rem .8rem;border-radius:4px;transition:.3s;}
+.menu a:hover{background:#222;}
+.hamburger{display:none;font-size:1.7rem;color:#fff;cursor:pointer;}
+@media(max-width:768px){.menu{display:none;flex-direction:column;background:#111;position:absolute;top:60px;right:0;width:200px;padding:1rem;}.menu.show{display:flex;}.hamburger{display:block;}}
 
-    /* ================= Footer ================= */
-    footer {text-align:center; padding:1rem; background:#111; color:#fff;}
+/* ===== Sections ===== */
+section{padding:8rem 2rem 3rem;min-height:100vh;}
+#home{background:linear-gradient(135deg,#3d00ff,#8c00ff);color:#fff;text-align:center;}
+#home h1{font-size:3rem;margin-bottom:1rem;animation:fadeIn .8s ease-out;}
+#home p{font-size:1.2rem;margin-bottom:2rem;opacity:.9;}
+#products,#designer,#contact{background:#fff;}
+#products h2,#contact h2,#designer h2{text-align:center;margin-bottom:1.5rem;font-size:2rem;}
 
-    /* ================= Page Sections ================= */
-    .page {display:none;}
-    .page.active {display:block;}
-  </style>
+/* ===== Grid ===== */
+.grid{display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));}
+.card{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 3px 8px rgba(0,0,0,.1);transition:.4s ease;transform:scale(.97);}
+.card img{width:100%;height:200px;object-fit:cover;}
+.card:hover{transform:scale(1);box-shadow:0 6px 15px rgba(0,0,0,.15);}
+.card h3{text-align:center;padding:1rem;}
+.card button{width:90%;margin:0 auto;margin-bottom:1rem;background:#3d00ff;color:#fff;padding:.5rem;border-radius:5px;display:block;}
+
+/* ===== Designer Modal ===== */
+#designerModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
+#designerContent{background:#fff;width:90%;max-width:600px;padding:2rem;border-radius:8px;position:relative;display:flex;flex-direction:column;gap:1rem;}
+#designerContent canvas{border:1px solid #ccc;max-width:100%;}
+#closeDesigner{position:absolute;top:10px;right:15px;font-size:1.5rem;cursor:pointer;}
+
+/* ===== Contact Form ===== */
+.contact-form{max-width:450px;margin:0 auto;display:flex;flex-direction:column;gap:1rem;}
+input,textarea{padding:.75rem;border:1px solid #ccc;border-radius:5px;width:100%;font-size:1rem;}
+.contact-form button{padding:.75rem;background:#111;color:#fff;border-radius:5px;font-size:1rem;}
+
+/* ===== Footer ===== */
+footer{text-align:center;padding:1rem;background:#111;color:#fff;margin-top:2rem;}
+
+/* ===== Animations ===== */
+@keyframes fadeIn{from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
+</style>
 </head>
 <body>
-  <!-- ================= Header / Navbar ================= -->
-  <header>
-    <nav class="navbar">
-      <div class="logo">TeeHoodie</div>
-      <div class="nav-links" id="navLinks">
-        <a href="#" onclick="showPage('home')">Home</a>
-        <a href="#" onclick="showPage('products')">Products</a>
-        <a href="#" onclick="showPage('contact')">Contact</a>
-        <a href="#" id="loginBtn">Login with Google</a>
-      </div>
-      <i class="fas fa-bars" onclick="toggleMenu()"></i>
-    </nav>
-  </header>
 
-  <!-- ================= Home Page ================= -->
-  <main>
-    <section id="home" class="page active hero">
-      <h1>Create Your Own T-Shirt & Hoodie</h1>
-      <p>Design, customize, and order your style online.</p>
-      <a href="#" onclick="showPage('products')" class="btn">Start Designing</a>
-    </section>
+<!-- ===== Navbar ===== -->
+<header>
+  <div class="logo">Surge</div>
+  <nav class="menu" id="menu">
+    <a href="#home" class="nav-link">Home</a>
+    <a href="#products" class="nav-link">Products</a>
+    <a href="#designer" class="nav-link">Designer</a>
+    <a href="#contact" class="nav-link">Contact</a>
+    <a href="#" id="googleSignInBtn">Sign In</a>
+  </nav>
+  <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+</header>
 
-    <!-- ================= Products Page ================= -->
-    <section id="products" class="page products-page">
-      <h2>Our Products</h2>
-      <div class="products-grid">
-        <div class="product-card">
-          <img src="https://via.placeholder.com/300x250.png?text=Classic+Tee" alt="T-shirt 1">
-          <h3>Classic Tee</h3>
-        </div>
-        <div class="product-card">
-          <img src="https://via.placeholder.com/300x250.png?text=Cozy+Hoodie" alt="Hoodie 1">
-          <h3>Cozy Hoodie</h3>
-        </div>
-        <div class="product-card">
-          <img src="https://via.placeholder.com/300x250.png?text=V-Neck+Tee" alt="T-shirt 2">
-          <h3>V-Neck Tee</h3>
-        </div>
-        <!-- Add more products as needed -->
-      </div>
-    </section>
+<!-- ===== Home ===== -->
+<section id="home">
+  <h1>Design Your Custom Apparel</h1>
+  <p>Create unique tees & hoodies with Surge. Modern. Fast. Simple.</p>
+  <button onclick="scrollToSection('products')" style="padding:1rem 2rem;font-size:1rem;border:none;background:#fff;color:#3d00ff;border-radius:5px;">View Products</button>
+</section>
 
-    <!-- ================= Contact Page ================= -->
-    <section id="contact" class="page contact-page">
-      <h2>Contact Us</h2>
-      <form>
-        <label>Email:</label>
-        <input type="email" placeholder="your.email@example.com" required>
-        <label>Message:</label>
-        <textarea placeholder="Your message..." required></textarea>
-        <button type="submit">Send</button>
-      </form>
-    </section>
-  </main>
+<!-- ===== Products ===== -->
+<section id="products">
+  <h2>Featured Products</h2>
+  <div class="grid" id="productGrid">
+    <!-- Products injected via JS -->
+  </div>
+</section>
 
-  <!-- ================= Footer ================= -->
-  <footer>
-    <p>&copy; 2026 TeeHoodie. All rights reserved.</p>
-  </footer>
+<!-- ===== Designer ===== -->
+<section id="designer">
+  <h2>Designer</h2>
+  <div style="text-align:center;margin-bottom:1rem;">
+    <button onclick="openDesigner('Tee')">Design Tee</button>
+    <button onclick="openDesigner('Hoodie')">Design Hoodie</button>
+  </div>
+</section>
 
-  <!-- ================= JS ================= -->
-  <script>
-    // Toggle mobile menu
-    function toggleMenu() {
-      const navLinks = document.getElementById('navLinks');
-      navLinks.classList.toggle('active');
+<div id="designerModal">
+  <div id="designerContent">
+    <span id="closeDesigner">&times;</span>
+    <canvas id="designCanvas" width="400" height="400"></canvas>
+    <input type="file" id="imageUpload">
+    <button id="saveDesignBtn">Save Design</button>
+  </div>
+</div>
+
+<!-- ===== Contact ===== -->
+<section id="contact">
+  <h2>Contact Us</h2>
+  <div class="contact-form">
+    <input type="email" placeholder="Your Email">
+    <textarea rows="5" placeholder="Your Message"></textarea>
+    <button>Send Message</button>
+  </div>
+</section>
+
+<footer>&copy; 2026 Surge. All rights reserved.</footer>
+
+<script>
+// ===== Navbar Toggle =====
+const hamburger=document.getElementById('hamburger');
+const menu=document.getElementById('menu');
+hamburger.onclick=()=>menu.classList.toggle('show');
+document.querySelectorAll('.nav-link').forEach(link=>link.addEventListener('click',()=>menu.classList.remove('show')));
+function scrollToSection(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+
+// ===== Firebase =====
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+// ===== Google Sign-In =====
+document.getElementById('googleSignInBtn').addEventListener('click',()=>{
+  const provider=new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+  .then(res=>alert("Signed in: "+res.user.email))
+  .catch(err=>alert("Sign-in failed: "+err.message));
+});
+
+// ===== Product Grid =====
+const products=[
+  {name:"Surge Tee",img:"https://via.placeholder.com/300x200?text=Surge+Tee"},
+  {name:"Surge Hoodie",img:"https://via.placeholder.com/300x200?text=Surge+Hoodie"},
+  {name:"Long Sleeve",img:"https://via.placeholder.com/300x200?text=Long+Sleeve"}
+];
+const grid=document.getElementById('productGrid');
+products.forEach(p=>{
+  const div=document.createElement('div');
+  div.className='card';
+  div.innerHTML=`<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><button onclick="openDesigner('${p.name}')">Design</button>`;
+  grid.appendChild(div);
+});
+
+// ===== Designer Modal =====
+const designerModal=document.getElementById('designerModal');
+const closeDesigner=document.getElementById('closeDesigner');
+const canvas=document.getElementById('designCanvas');
+const ctx=canvas.getContext('2d');
+let currentProduct='';
+
+function openDesigner(product){
+  currentProduct=product;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#fff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  designerModal.style.display='flex';
+}
+closeDesigner.onclick=()=>designerModal.style.display='none';
+window.onclick=e=>{if(e.target==designerModal)designerModal.style.display='none';}
+
+// ===== Image Upload =====
+document.getElementById('imageUpload').addEventListener('change',function(e){
+  const file=e.target.files[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=function(event){
+      const img=new Image();
+      img.onload=function(){ctx.drawImage(img,50,50,300,300);}
+      img.src=event.target.result;
     }
+    reader.readAsDataURL(file);
+  }
+});
 
-    // Switch between "pages"
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
-      if(window.innerWidth <= 768) toggleMenu(); // close nav on mobile
-    }
-
-    // Google login placeholder
-    const loginBtn = document.getElementById('loginBtn');
-    loginBtn.addEventListener('click', () => {
-      alert("Google login placeholder. Add Firebase Auth to make it functional.");
-    });
-  </script>
+// ===== Save Design =====
+document.getElementById('saveDesignBtn').addEventListener('click',()=>{
+  if(!auth.currentUser){alert('Sign in first'); return;}
+  canvas.toBlob(blob=>{
+    const storageRef=storage.ref().child(`designs/${auth.currentUser.uid}/${Date.now()}.png`);
+    storageRef.put(blob).then(()=>alert('Design saved!'));
+  });
+});
+</script>
 </body>
 </html>
