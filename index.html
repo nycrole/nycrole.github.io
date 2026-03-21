@@ -1,310 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Surge E-Commerce</title>
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<!-- Font Awesome for icons -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<style>
-/* ------------------- General Reset & Styles ------------------- */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Roboto', sans-serif; background: #0b0f23; color: #fff; scroll-behavior: smooth; }
-a { text-decoration: none; color: inherit; }
-ul { list-style: none; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Apparel Design</title>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    /* ================= Base & Reset ================= */
+    * {margin:0; padding:0; box-sizing:border-box;}
+    body {font-family: Arial, sans-serif; line-height:1.6; color:#333;}
+    a {text-decoration:none; color: inherit;}
+    header, footer {background:#111; color:#fff;}
+    .navbar {display:flex; justify-content:space-between; align-items:center; padding:1rem;}
+    .nav-links {display:flex; gap:1rem;}
+    .nav-links a {padding:.5rem 1rem; border-radius:4px; transition:.3s;}
+    .nav-links a:hover {background:#444;}
+    .fa-bars {display:none; cursor:pointer; color:#fff;}
 
-/* ------------------- Navbar ------------------- */
-nav { position: sticky; top: 0; width: 100%; background: #0b0f23; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; z-index: 1000; border-bottom: 1px solid #1f2640; }
-nav .logo { font-size: 1.5rem; font-weight: bold; color: #1eb2ff; }
-nav ul { display: flex; gap: 1.5rem; }
-nav ul li a { padding: 0.5rem 1rem; border-radius: 5px; transition: 0.3s; }
-nav ul li a:hover { background: #1f2640; }
-.nav-toggle { display: none; font-size: 1.5rem; cursor: pointer; }
+    /* ================= Responsive nav ================= */
+    @media(max-width:768px){
+      .nav-links {display:none; flex-direction:column; background:#222; position:absolute; top:60px; right:0; width:200px;}
+      .nav-links.active {display:flex;}
+      .fa-bars {display:block;}
+    }
 
-/* ------------------- Sections ------------------- */
-section { padding: 80px 20px; }
-section h1, section h2 { color: #1eb2ff; margin-bottom: 1rem; }
-section p { margin-bottom: 1rem; color: #ccc; }
+    /* ================= Hero section ================= */
+    .hero {text-align:center; padding:4rem 1rem; background:#f5f5f5;}
+    .hero h1 {font-size:2rem; margin-bottom:1rem;}
+    .hero .btn {background:#111; color:#fff; padding:.75rem 1.5rem; border-radius:5px; display:inline-block; margin-top:1rem;}
 
-/* ------------------- Hero ------------------- */
-#home { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 90vh; background: linear-gradient(180deg, #0b0f23 0%, #11162d 100%); }
-#home .cta { padding: 1rem 2rem; background: #1eb2ff; color: #0b0f23; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; font-weight: bold; margin-top: 1rem; }
-#home .cta:hover { background: #17a0ff; }
+    /* ================= Products grid ================= */
+    .products-page {padding:2rem;}
+    .products-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:2rem;}
+    .product-card {text-align:center; border:1px solid #ddd; padding:1rem; border-radius:5px;}
+    .product-card img {width:100%; height:250px; object-fit:cover;}
 
-/* ------------------- Product Grid ------------------- */
-.products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-.product-card { background: #11162d; border-radius: 8px; overflow: hidden; transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; }
-.product-card:hover { transform: translateY(-5px); }
-.product-card img { width: 100%; aspect-ratio: 6/8; object-fit: cover; }
-.product-card .info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-.product-card .info h3 { margin-bottom: 0.5rem; }
-.product-card .info .price { color: #1eb2ff; margin-bottom: 0.5rem; font-weight: bold; }
-.product-card .info button { padding: 0.5rem; border: none; background: #1eb2ff; color: #0b0f23; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-.product-card .info button:hover { background: #17a0ff; }
+    /* ================= Contact form ================= */
+    .contact-page {padding:2rem;}
+    form {display:flex; flex-direction:column; gap:1rem; max-width:400px; margin:auto;}
+    input, textarea {padding:.75rem; border:1px solid #ccc; border-radius:4px; width:100%;}
+    button {padding:.75rem; border:none; background:#111; color:#fff; border-radius:4px; cursor:pointer;}
 
-/* ------------------- Modal ------------------- */
-.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 15, 35, 0.95); display: none; justify-content: center; align-items: center; z-index: 2000; }
-.modal-content { background: #11162d; padding: 20px; border-radius: 10px; max-width: 500px; width: 90%; position: relative; }
-.modal-content img { width: 100%; aspect-ratio: 6/8; object-fit: cover; margin-bottom: 10px; }
-.modal-content .close { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
+    /* ================= Footer ================= */
+    footer {text-align:center; padding:1rem; background:#111; color:#fff;}
 
-/* ------------------- Contact Form ------------------- */
-form { display: flex; flex-direction: column; gap: 15px; max-width: 500px; margin: auto; }
-form input, form textarea { padding: 10px; border-radius: 5px; border: none; background: #1f2640; color: #fff; resize: none; }
-form button { padding: 10px; border: none; border-radius: 5px; background: #1eb2ff; color: #0b0f23; cursor: pointer; font-weight: bold; transition: 0.3s; }
-form button:hover { background: #17a0ff; }
-
-/* ------------------- Cart ------------------- */
-.cart-items { max-width: 800px; margin: auto; }
-.cart-item { display: flex; justify-content: space-between; align-items: center; background: #11162d; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-.cart-item img { width: 60px; aspect-ratio: 6/8; object-fit: cover; border-radius: 5px; }
-.cart-item-details { flex-grow: 1; margin-left: 10px; }
-.cart-item-details h4 { color: #1eb2ff; }
-.cart-item input { width: 50px; padding: 5px; border-radius: 5px; border: none; background: #1f2640; color: #fff; text-align: center; }
-.cart-total { text-align: right; margin-top: 10px; font-size: 1.2rem; font-weight: bold; color: #1eb2ff; }
-.checkout-btn { padding: 10px 20px; background: #1eb2ff; color: #0b0f23; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; float: right; }
-.checkout-btn:hover { background: #17a0ff; }
-
-/* ------------------- Account ------------------- */
-.account-form { max-width: 400px; margin: auto; display: flex; flex-direction: column; gap: 15px; }
-.account-form input { padding: 10px; border-radius: 5px; border: none; background: #1f2640; color: #fff; }
-.account-form button { padding: 10px; border-radius: 5px; border: none; background: #1eb2ff; color: #0b0f23; font-weight: bold; cursor: pointer; transition: 0.3s; }
-.account-form button:hover { background: #17a0ff; }
-
-/* ------------------- Footer ------------------- */
-footer { background: #0b0f23; padding: 20px; text-align: center; border-top: 1px solid #1f2640; }
-footer p { margin-bottom: 10px; }
-footer a { color: #1eb2ff; margin: 0 5px; transition: 0.3s; }
-footer a:hover { color: #17a0ff; }
-
-/* ------------------- Responsive ------------------- */
-@media (max-width: 768px) {
-  nav ul { display: none; flex-direction: column; background: #0b0f23; position: absolute; top: 60px; right: 0; width: 200px; border-radius: 0 0 0 10px; padding: 10px; }
-  nav ul.active { display: flex; }
-  .nav-toggle { display: block; }
-}
-</style>
+    /* ================= Page Sections ================= */
+    .page {display:none;}
+    .page.active {display:block;}
+  </style>
 </head>
 <body>
-
-<!-- ------------------- Navbar ------------------- -->
-<nav>
-  <div class="logo">Surge</div>
-  <ul id="nav-links">
-    <li><a href="#home" onclick="showSection('home')">Home</a></li>
-    <li><a href="#products" onclick="showSection('products')">Products</a></li>
-    <li><a href="#contact" onclick="showSection('contact')">Contact</a></li>
-    <li><a href="#cart" onclick="showSection('cart')"><i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)</a></li>
-    <li><a href="#account" onclick="showSection('account')"><i class="fas fa-user"></i> Account</a></li>
-  </ul>
-  <div class="nav-toggle" onclick="toggleNav()"><i class="fas fa-bars"></i></div>
-</nav>
-
-<!-- ------------------- Home Section ------------------- -->
-<section id="home">
-  <h1>Welcome to Surge</h1>
-  <p>Your ultimate destination for stylish and modern gear.</p>
-  <button class="cta" onclick="showSection('products')">Shop Now</button>
-
-  <div class="products-grid" style="margin-top:50px;">
-    <div class="product-card" onclick="openModal(0)">
-      <img src="https://via.placeholder.com/300x400.png?text=Product+1" alt="Product 1">
-      <div class="info">
-        <h3>Product 1</h3>
-        <div class="price">$29.99</div>
-        <button onclick="addToCart(event, 0)">Add to Cart</button>
+  <!-- ================= Header / Navbar ================= -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">TeeHoodie</div>
+      <div class="nav-links" id="navLinks">
+        <a href="#" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('products')">Products</a>
+        <a href="#" onclick="showPage('contact')">Contact</a>
+        <a href="#" id="loginBtn">Login with Google</a>
       </div>
-    </div>
-    <div class="product-card" onclick="openModal(1)">
-      <img src="https://via.placeholder.com/300x400.png?text=Product+2" alt="Product 2">
-      <div class="info">
-        <h3>Product 2</h3>
-        <div class="price">$39.99</div>
-        <button onclick="addToCart(event, 1)">Add to Cart</button>
+      <i class="fas fa-bars" onclick="toggleMenu()"></i>
+    </nav>
+  </header>
+
+  <!-- ================= Home Page ================= -->
+  <main>
+    <section id="home" class="page active hero">
+      <h1>Create Your Own T-Shirt & Hoodie</h1>
+      <p>Design, customize, and order your style online.</p>
+      <a href="#" onclick="showPage('products')" class="btn">Start Designing</a>
+    </section>
+
+    <!-- ================= Products Page ================= -->
+    <section id="products" class="page products-page">
+      <h2>Our Products</h2>
+      <div class="products-grid">
+        <div class="product-card">
+          <img src="https://via.placeholder.com/300x250.png?text=Classic+Tee" alt="T-shirt 1">
+          <h3>Classic Tee</h3>
+        </div>
+        <div class="product-card">
+          <img src="https://via.placeholder.com/300x250.png?text=Cozy+Hoodie" alt="Hoodie 1">
+          <h3>Cozy Hoodie</h3>
+        </div>
+        <div class="product-card">
+          <img src="https://via.placeholder.com/300x250.png?text=V-Neck+Tee" alt="T-shirt 2">
+          <h3>V-Neck Tee</h3>
+        </div>
+        <!-- Add more products as needed -->
       </div>
-    </div>
-    <div class="product-card" onclick="openModal(2)">
-      <img src="https://via.placeholder.com/300x400.png?text=Product+3" alt="Product 3">
-      <div class="info">
-        <h3>Product 3</h3>
-        <div class="price">$49.99</div>
-        <button onclick="addToCart(event, 2)">Add to Cart</button>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ------------------- Products Section ------------------- -->
-<section id="products" style="display:none;">
-  <h2>Our Products</h2>
-  <div class="products-grid" id="products-grid">
-    <!-- JS will populate products here for simplicity -->
-  </div>
-</section>
+    <!-- ================= Contact Page ================= -->
+    <section id="contact" class="page contact-page">
+      <h2>Contact Us</h2>
+      <form>
+        <label>Email:</label>
+        <input type="email" placeholder="your.email@example.com" required>
+        <label>Message:</label>
+        <textarea placeholder="Your message..." required></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </section>
+  </main>
 
-<!-- ------------------- Contact Section ------------------- -->
-<section id="contact" style="display:none;">
-  <h2>Contact Us</h2>
-  <form id="contact-form" onsubmit="submitContact(event)">
-    <input type="text" placeholder="Name" required>
-    <input type="email" placeholder="Email" required>
-    <textarea placeholder="Message" rows="5" required></textarea>
-    <button type="submit">Send Message</button>
-  </form>
-</section>
+  <!-- ================= Footer ================= -->
+  <footer>
+    <p>&copy; 2026 TeeHoodie. All rights reserved.</p>
+  </footer>
 
-<!-- ------------------- Cart Section ------------------- -->
-<section id="cart" style="display:none;">
-  <h2>Your Cart</h2>
-  <div class="cart-items" id="cart-items"></div>
-  <div class="cart-total" id="cart-total">Total: $0.00</div>
-  <button class="checkout-btn">Checkout</button>
-</section>
+  <!-- ================= JS ================= -->
+  <script>
+    // Toggle mobile menu
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
 
-<!-- ------------------- Account Section ------------------- -->
-<section id="account" style="display:none;">
-  <h2>Account</h2>
-  <form class="account-form">
-    <input type="text" placeholder="Username" required>
-    <input type="email" placeholder="Email" required>
-    <input type="password" placeholder="Password" required>
-    <button type="submit">Sign Up / Login</button>
-  </form>
-</section>
+    // Switch between "pages"
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      if(window.innerWidth <= 768) toggleMenu(); // close nav on mobile
+    }
 
-<!-- ------------------- Product Modal ------------------- -->
-<div class="modal" id="product-modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img id="modal-img" src="" alt="">
-    <h3 id="modal-title"></h3>
-    <div id="modal-price" class="price"></div>
-    <button id="modal-add" onclick="addToCartFromModal()">Add to Cart</button>
-  </div>
-</div>
-
-<!-- ------------------- Footer ------------------- -->
-<footer>
-  <p>© 2026 Surge. All rights reserved.</p>
-  <p>
-    <a href="#">Facebook</a> | 
-    <a href="#">Instagram</a> | 
-    <a href="#">Twitter</a>
-  </p>
-</footer>
-
-<!-- ------------------- JS ------------------- -->
-<script>
-/* ---------- Navigation ---------- */
-function toggleNav() {
-  document.getElementById('nav-links').classList.toggle('active');
-}
-function showSection(sectionId) {
-  document.querySelectorAll('section').forEach(sec => sec.style.display='none');
-  document.getElementById(sectionId).style.display='block';
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-/* ---------- Products ---------- */
-const products = [
-  {id:0,name:'Product 1',price:29.99,img:'https://via.placeholder.com/300x400.png?text=Product+1'},
-  {id:1,name:'Product 2',price:39.99,img:'https://via.placeholder.com/300x400.png?text=Product+2'},
-  {id:2,name:'Product 3',price:49.99,img:'https://via.placeholder.com/300x400.png?text=Product+3'},
-  {id:3,name:'Product 4',price:59.99,img:'https://via.placeholder.com/300x400.png?text=Product+4'},
-  {id:4,name:'Product 5',price:69.99,img:'https://via.placeholder.com/300x400.png?text=Product+5'},
-  {id:5,name:'Product 6',price:79.99,img:'https://via.placeholder.com/300x400.png?text=Product+6'},
-];
-
-// Populate products page
-const grid = document.getElementById('products-grid');
-products.forEach((p,i)=>{
-  const card = document.createElement('div');
-  card.className='product-card';
-  card.innerHTML=`
-    <img src="${p.img}" alt="${p.name}">
-    <div class="info">
-      <h3>${p.name}</h3>
-      <div class="price">$${p.price.toFixed(2)}</div>
-      <button onclick="addToCart(event,${i})">Add to Cart</button>
-    </div>
-  `;
-  card.onclick = ()=>openModal(i);
-  grid.appendChild(card);
-});
-
-/* ---------- Cart ---------- */
-let cart = [];
-
-function addToCart(e,index){
-  e.stopPropagation();
-  cart.push(products[index]);
-  updateCart();
-}
-
-function addToCartFromModal(){
-  cart.push(currentModalProduct);
-  updateCart();
-  closeModal();
-}
-
-function updateCart(){
-  const container = document.getElementById('cart-items');
-  container.innerHTML='';
-  let total=0;
-  cart.forEach((item,i)=>{
-    total+=item.price;
-    const div = document.createElement('div');
-    div.className='cart-item';
-    div.innerHTML=`
-      <img src="${item.img}" alt="${item.name}">
-      <div class="cart-item-details">
-        <h4>${item.name}</h4>
-        <input type="number" min="1" value="1" onchange="changeQty(event,${i})">
-      </div>
-      <div>$${item.price.toFixed(2)}</div>
-      <button onclick="removeFromCart(${i})">x</button>
-    `;
-    container.appendChild(div);
-  });
-  document.getElementById('cart-total').innerText=`Total: $${total.toFixed(2)}`;
-  document.getElementById('cart-count').innerText=cart.length;
-}
-
-function removeFromCart(i){
-  cart.splice(i,1);
-  updateCart();
-}
-
-function changeQty(e,i){
-  const qty=parseInt(e.target.value);
-  cart[i].price=products[cart[i].id].price*qty;
-  updateCart();
-}
-
-/* ---------- Modal ---------- */
-let currentModalProduct=null;
-function openModal(index){
-  const modal=document.getElementById('product-modal');
-  const product=products[index];
-  currentModalProduct=product;
-  document.getElementById('modal-img').src=product.img;
-  document.getElementById('modal-title').innerText=product.name;
-  document.getElementById('modal-price').innerText=`$${product.price.toFixed(2)}`;
-  modal.style.display='flex';
-}
-
-function closeModal(){
-  document.getElementById('product-modal').style.display='none';
-}
-
-/* ---------- Contact Form ---------- */
-function submitContact(e){
-  e.preventDefault();
-  alert('Message sent! (This is a mock form)');
-  e.target.reset();
-}
-</script>
+    // Google login placeholder
+    const loginBtn = document.getElementById('loginBtn');
+    loginBtn.addEventListener('click', () => {
+      alert("Google login placeholder. Add Firebase Auth to make it functional.");
+    });
+  </script>
 </body>
 </html>
