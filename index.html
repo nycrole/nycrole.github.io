@@ -1,255 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Surge</title>
-
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-}
-
-body {
-    background: #0f0f0f;
-    color: white;
-}
-
-/* NAVBAR */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(10px);
-    position: sticky;
-    top: 0;
-}
-
-.logo {
-    font-size: 22px;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 25px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: white;
-    transition: 0.3s;
-}
-
-.nav-links a:hover {
-    color: #00d4ff;
-}
-
-/* MOBILE MENU */
-.menu-toggle {
-    display: none;
-    font-size: 26px;
-    cursor: pointer;
-}
-
-@media(max-width: 768px) {
-    .nav-links {
-        position: absolute;
-        top: 60px;
-        right: 0;
-        background: #111;
-        width: 100%;
-        flex-direction: column;
-        text-align: center;
-        display: none;
-    }
-
-    .nav-links.active {
-        display: flex;
-    }
-
-    .menu-toggle {
-        display: block;
-    }
-}
-
-/* HERO */
-.hero {
-    height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    flex-direction: column;
-}
-
-.hero h1 {
-    font-size: 3rem;
-}
-
-.hero p {
-    margin: 15px 0;
-    color: #aaa;
-}
-
-.btn {
-    padding: 12px 25px;
-    background: #00d4ff;
-    border: none;
-    color: black;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    background: white;
-}
-
-/* PRODUCTS */
-.products {
-    padding: 60px 30px;
-}
-
-.products h2 {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.product-card {
-    background: #1a1a1a;
-    padding: 20px;
-    border-radius: 10px;
-    transition: 0.3s;
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-}
-
-.product-card img {
-    width: 100%;
-    border-radius: 8px;
-}
-
-/* CONTACT */
-.contact {
-    padding: 60px 30px;
-}
-
-.contact form {
-    max-width: 500px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.contact input, .contact textarea {
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-}
-
-.contact button {
-    background: #00d4ff;
-    border: none;
-    padding: 12px;
-    cursor: pointer;
-}
-
-/* FOOTER */
-footer {
-    text-align: center;
-    padding: 20px;
-    background: #000;
-    margin-top: 40px;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surge | Home</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark"></span>
+        <span>Surge</span>
+      </a>
 
-<!-- NAVBAR -->
-<div class="navbar">
-    <div class="logo">SURGE</div>
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-    <div class="nav-links" id="navLinks">
-        <a href="#home">Home</a>
-        <a href="#products">Products</a>
-        <a href="#contact">Contact</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">☰</button>
+
+      <nav class="nav-links" id="navLinks">
+        <a class="active" href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="contact.html">Contact</a>
+        <a class="nav-cta" href="products.html">Shop Now</a>
+      </nav>
     </div>
-</div>
+  </header>
 
-<!-- HERO -->
-<section class="hero" id="home">
-    <h1>Power Your Style</h1>
-    <p>Modern. Clean. Elevated.</p>
-    <button class="btn">Shop Now</button>
-</section>
-
-<!-- PRODUCTS -->
-<section class="products" id="products">
-    <h2>Our Products</h2>
-
-    <div class="product-grid">
-        <div class="product-card">
-            <img src="https://via.placeholder.com/300x200">
-            <h3>Surge Tee</h3>
-            <p>$25.00</p>
-            <button class="btn">Buy</button>
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1>Modern gear for brands that move fast.</h1>
+          <p>
+            Surge is built for a clean, premium shopping experience with a sharp look on desktop and a smooth, easy flow on mobile.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="products.html">Browse Products</a>
+            <a class="button button-secondary" href="contact.html">Contact Us</a>
+          </div>
         </div>
 
-        <div class="product-card">
-            <img src="https://via.placeholder.com/300x200">
-            <h3>Surge Hoodie</h3>
-            <p>$60.00</p>
-            <button class="btn">Buy</button>
+        <div class="hero-card">
+          <div class="preview-box">
+            <div class="preview-tag">
+              <strong>New Season Drop</strong>
+              <small>Minimal design. Strong identity. Built to stand out.</small>
+            </div>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat">
+              <strong>Clean</strong>
+              <span>Modern storefront layout</span>
+            </div>
+            <div class="stat">
+              <strong>Fast</strong>
+              <span>Mobile-friendly navigation</span>
+            </div>
+            <div class="stat">
+              <strong>Sharp</strong>
+              <span>Premium product presentation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Built for the essentials</h2>
+            <p>Home, products, and contact each live on their own page, so the site feels more like a real storefront and less like a scrolling poster.</p>
+          </div>
         </div>
 
-        <div class="product-card">
-            <img src="https://via.placeholder.com/300x200">
-            <h3>Surge Cap</h3>
-            <p>$20.00</p>
-            <button class="btn">Buy</button>
+        <div class="grid feature-grid">
+          <div class="card">
+            <div class="card-body">
+              <h3>Responsive Navbar</h3>
+              <p>The nav collapses into a mobile menu on smaller devices and stays normal on tablets and desktops.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body">
+              <h3>Premium Layout</h3>
+              <p>Dark, modern styling with smooth spacing, glassy panels, and a Shopify-style polished feel.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body">
+              <h3>Easy Expansion</h3>
+              <p>This setup can grow into a real store with cart, checkout, login, or custom product pages later.</p>
+            </div>
+          </div>
         </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 Surge. All Rights Reserved.</p>
     </div>
-</section>
+  </footer>
 
-<!-- CONTACT -->
-<section class="contact" id="contact">
-    <h2 style="text-align:center; margin-bottom:20px;">Contact Us</h2>
-
-    <form>
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Your Email" required>
-        <textarea rows="5" placeholder="Message"></textarea>
-        <button type="submit">Send Message</button>
-    </form>
-</section>
-
-<!-- FOOTER -->
-<footer>
-    <p>© 2026 Surge. All Rights Reserved.</p>
-</footer>
-
-<script>
-function toggleMenu() {
-    document.getElementById("navLinks").classList.toggle("active");
-}
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
