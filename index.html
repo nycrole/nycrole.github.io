@@ -1,212 +1,1457 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Surge - Custom Apparel Designer</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Surge | T-Shirt & Hoodie Designer</title>
+  <meta name="description" content="A modern t-shirt and hoodie designer website with home, products, and contact pages in one file." />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: rgba(255, 255, 255, 0.92);
+      --surface-strong: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: rgba(17, 24, 39, 0.08);
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.06);
+      --brand: #111827;
+      --brand-2: #2563eb;
+      --accent: #0f766e;
+      --accent-2: #8b5cf6;
+      --success: #16a34a;
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --container: 1200px;
+    }
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+    * {
+      box-sizing: border-box;
+    }
 
-<!-- Font Awesome -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    html {
+      scroll-behavior: smooth;
+    }
 
-<style>
-/* ===== Base ===== */
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Segoe UI',sans-serif;background:#f9f9f9;color:#333;}
-a{text-decoration:none;color:inherit;}
-button{cursor:pointer;border:none;}
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.09), transparent 36%),
+        radial-gradient(circle at top right, rgba(139, 92, 246, 0.08), transparent 30%),
+        linear-gradient(180deg, #ffffff 0%, #f4f7fb 100%);
+      min-height: 100vh;
+    }
 
-/* ===== Navbar ===== */
-header{position:fixed;top:0;left:0;width:100%;background:#111;padding:.75rem 2rem;display:flex;justify-content:space-between;align-items:center;z-index:999;}
-.logo{color:#fff;font-size:1.8rem;font-weight:700;}
-.menu{display:flex;gap:1.5rem;}
-.menu a{color:#fff;padding:.5rem .8rem;border-radius:4px;transition:.3s;}
-.menu a:hover{background:#222;}
-.hamburger{display:none;font-size:1.7rem;color:#fff;cursor:pointer;}
-@media(max-width:768px){.menu{display:none;flex-direction:column;background:#111;position:absolute;top:60px;right:0;width:200px;padding:1rem;}.menu.show{display:flex;}.hamburger{display:block;}}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-/* ===== Sections ===== */
-section{padding:8rem 2rem 3rem;min-height:100vh;}
-#home{background:linear-gradient(135deg,#3d00ff,#8c00ff);color:#fff;text-align:center;}
-#home h1{font-size:3rem;margin-bottom:1rem;animation:fadeIn .8s ease-out;}
-#home p{font-size:1.2rem;margin-bottom:2rem;opacity:.9;}
-#products,#designer,#contact{background:#fff;}
-#products h2,#contact h2,#designer h2{text-align:center;margin-bottom:1.5rem;font-size:2rem;}
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
 
-/* ===== Grid ===== */
-.grid{display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));}
-.card{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 3px 8px rgba(0,0,0,.1);transition:.4s ease;transform:scale(.97);}
-.card img{width:100%;height:200px;object-fit:cover;}
-.card:hover{transform:scale(1);box-shadow:0 6px 15px rgba(0,0,0,.15);}
-.card h3{text-align:center;padding:1rem;}
-.card button{width:90%;margin:0 auto;margin-bottom:1rem;background:#3d00ff;color:#fff;padding:.5rem;border-radius:5px;display:block;}
+    .container {
+      width: min(100% - 32px, var(--container));
+      margin-inline: auto;
+    }
 
-/* ===== Designer Modal ===== */
-#designerModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
-#designerContent{background:#fff;width:90%;max-width:600px;padding:2rem;border-radius:8px;position:relative;display:flex;flex-direction:column;gap:1rem;}
-#designerContent canvas{border:1px solid #ccc;max-width:100%;}
-#closeDesigner{position:absolute;top:10px;right:15px;font-size:1.5rem;cursor:pointer;}
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.74);
+      border-bottom: 1px solid var(--border);
+    }
 
-/* ===== Contact Form ===== */
-.contact-form{max-width:450px;margin:0 auto;display:flex;flex-direction:column;gap:1rem;}
-input,textarea{padding:.75rem;border:1px solid #ccc;border-radius:5px;width:100%;font-size:1rem;}
-.contact-form button{padding:.75rem;background:#111;color:#fff;border-radius:5px;font-size:1rem;}
+    .nav-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 78px;
+      padding: 14px 0;
+    }
 
-/* ===== Footer ===== */
-footer{text-align:center;padding:1rem;background:#111;color:#fff;margin-top:2rem;}
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      font-size: 1.25rem;
+    }
 
-/* ===== Animations ===== */
-@keyframes fadeIn{from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
-</style>
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 55%, var(--accent-2) 100%);
+      box-shadow: var(--shadow-soft);
+      flex-shrink: 0;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-link {
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text);
+      padding: 11px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      font-weight: 600;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(17, 24, 39, 0.06);
+      border-color: rgba(17, 24, 39, 0.05);
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: white;
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+
+    .mobile-toggle {
+      display: none;
+    }
+
+    .mobile-panel {
+      display: none;
+      padding: 0 0 18px 0;
+    }
+
+    .mobile-panel.open {
+      display: block;
+    }
+
+    .mobile-panel .mobile-links {
+      display: grid;
+      gap: 10px;
+      padding: 12px 0 0;
+    }
+
+    .mobile-panel .nav-link {
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+      background: white;
+      border-color: var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero {
+      padding: 58px 0 28px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(15px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-main {
+      padding: 42px;
+      position: relative;
+      min-height: 580px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(37, 99, 235, 0.11), transparent 22%),
+        radial-gradient(circle at 85% 20%, rgba(139, 92, 246, 0.12), transparent 24%),
+        linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,255,255,0.78));
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.1);
+      color: #0f766e;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      line-height: 0.94;
+      margin: 0;
+      letter-spacing: -0.06em;
+      max-width: 10ch;
+    }
+
+    .hero p {
+      font-size: 1.08rem;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 62ch;
+      margin: 18px 0 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 999px;
+      padding: 14px 20px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+      color: white;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--text);
+      border-color: var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.4rem;
+      letter-spacing: -0.04em;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 18px;
+    }
+
+    .side-panel {
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .preview-frame {
+      border-radius: 24px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #f9fafb, #eef2ff);
+      border: 1px solid rgba(17, 24, 39, 0.06);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+      aspect-ratio: 4 / 5;
+      position: relative;
+    }
+
+    .preview-frame svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--border);
+    }
+
+    .mini-thumb {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(37,99,235,.2), rgba(139,92,246,.18));
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      color: var(--brand);
+      font-size: 1.1rem;
+    }
+
+    .mini-item strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .mini-item span {
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .section {
+      padding: 28px 0 58px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.7rem);
+      letter-spacing: -0.05em;
+    }
+
+    .section p.lead {
+      margin: 0;
+      color: var(--muted);
+      max-width: 60ch;
+      line-height: 1.7;
+    }
+
+    .grid-features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature {
+      padding: 24px;
+      background: rgba(255,255,255,0.88);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .feature .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      background: rgba(37,99,235,.12);
+      color: var(--brand-2);
+      font-weight: 800;
+    }
+
+    .feature h3 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .view {
+      display: none;
+      padding-bottom: 50px;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .products-toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin: 18px 0 20px;
+    }
+
+    .searchbar {
+      flex: 1;
+      min-width: 260px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.95);
+      border-radius: 999px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .searchbar input {
+      border: none;
+      outline: none;
+      width: 100%;
+      background: transparent;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--muted);
+      box-shadow: var(--shadow-soft);
+      transition: all 0.2s ease;
+    }
+
+    .chip.active {
+      color: white;
+      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-2) 100%);
+      border-color: transparent;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .product-card {
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .product-image {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 50%, #ecfeff 100%);
+      flex-shrink: 0;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transform: scale(1);
+      transition: transform 0.35s ease;
+    }
+
+    .product-card:hover .product-image img {
+      transform: scale(1.04);
+    }
+
+    .product-body {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .product-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .product-top h3 {
+      margin: 0;
+      font-size: 1.08rem;
+      line-height: 1.25;
+    }
+
+    .price {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--brand);
+      white-space: nowrap;
+    }
+
+    .product-body p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .swatches {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(17, 24, 39, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+
+    .product-actions .btn {
+      padding: 12px 16px;
+      font-size: 0.94rem;
+    }
+
+    .designer-banner {
+      margin-top: 22px;
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.12), transparent 35%),
+        linear-gradient(135deg, #0f172a 0%, #1d4ed8 55%, #7c3aed 100%);
+      color: white;
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .designer-banner p {
+      margin: 8px 0 0;
+      color: rgba(255,255,255,.82);
+      line-height: 1.7;
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 0.9fr;
+      gap: 20px;
+      align-items: start;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+    }
+
+    .card-pad {
+      padding: 24px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(17, 24, 39, 0.10);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: rgba(37, 99, 235, 0.55);
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+    }
+
+    .field textarea {
+      min-height: 160px;
+      resize: vertical;
+    }
+
+    .contact-info {
+      display: grid;
+      gap: 14px;
+    }
+
+    .info-item {
+      display: flex;
+      gap: 14px;
+      align-items: start;
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(248,250,252,0.96));
+      border: 1px solid var(--border);
+    }
+
+    .info-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: rgba(37,99,235,0.1);
+      color: var(--brand-2);
+      font-size: 1.05rem;
+      flex-shrink: 0;
+    }
+
+    .info-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .info-item span {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .google-box {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(17, 24, 39, 0.03);
+      border: 1px dashed rgba(17, 24, 39, 0.15);
+    }
+
+    .google-btn {
+      width: 100%;
+      border: 1px solid rgba(17, 24, 39, 0.12);
+      background: white;
+      color: var(--text);
+      padding: 14px 16px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .google-g {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: conic-gradient(
+        #ea4335 0 25%,
+        #fbbc05 25% 50%,
+        #34a853 50% 75%,
+        #4285f4 75% 100%
+      );
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .google-g::after {
+      content: "G";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.22);
+    }
+
+    .footer {
+      margin-top: 30px;
+      padding: 22px 0 34px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(255,255,255,0.35);
+    }
+
+    .footer-grid {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .footer small {
+      line-height: 1.7;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--text);
+      font-weight: 600;
+      opacity: 0.82;
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid,
+      .contact-layout,
+      .grid-features,
+      .products-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero-main {
+        min-height: auto;
+      }
+
+      .designer-banner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-toggle {
+        display: inline-flex;
+      }
+
+      .hero-grid,
+      .contact-layout,
+      .grid-features,
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 28px;
+      }
+
+      .hero-main {
+        padding: 24px;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: start;
+      }
+
+      .products-toolbar {
+        align-items: stretch;
+      }
+
+      .searchbar {
+        min-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        width: min(100% - 22px, var(--container));
+      }
+
+      .nav-wrap {
+        min-height: 70px;
+      }
+
+      .brand {
+        font-size: 1.08rem;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+      }
+
+      .btn,
+      .nav-link {
+        width: 100%;
+      }
+
+      .hero h1 {
+        max-width: 100%;
+      }
+
+      .hero-actions {
+        display: grid;
+      }
+
+      .designer-banner {
+        padding: 22px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <header class="topbar">
+    <div class="container">
+      <div class="nav-wrap">
+        <a href="#home" class="brand" data-nav="home" aria-label="Surge home">
+          <span class="brand-mark">S</span>
+          <span>Surge</span>
+        </a>
 
-<!-- ===== Navbar ===== -->
-<header>
-  <div class="logo">Surge</div>
-  <nav class="menu" id="menu">
-    <a href="#home" class="nav-link">Home</a>
-    <a href="#products" class="nav-link">Products</a>
-    <a href="#designer" class="nav-link">Designer</a>
-    <a href="#contact" class="nav-link">Contact</a>
-    <a href="#" id="googleSignInBtn">Sign In</a>
-  </nav>
-  <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
-</header>
+        <nav class="nav-actions" aria-label="Main navigation">
+          <div class="nav-links" id="desktopNav">
+            <button class="nav-link active" data-page="home">Home</button>
+            <button class="nav-link" data-page="products">Products</button>
+            <button class="nav-link" data-page="contact">Contact</button>
+          </div>
 
-<!-- ===== Home ===== -->
-<section id="home">
-  <h1>Design Your Custom Apparel</h1>
-  <p>Create unique tees & hoodies with Surge. Modern. Fast. Simple.</p>
-  <button onclick="scrollToSection('products')" style="padding:1rem 2rem;font-size:1rem;border:none;background:#fff;color:#3d00ff;border-radius:5px;">View Products</button>
-</section>
+          <button class="icon-btn mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+            ☰
+          </button>
+        </nav>
+      </div>
 
-<!-- ===== Products ===== -->
-<section id="products">
-  <h2>Featured Products</h2>
-  <div class="grid" id="productGrid">
-    <!-- Products injected via JS -->
-  </div>
-</section>
+      <div class="mobile-panel" id="mobilePanel">
+        <div class="mobile-links">
+          <button class="nav-link active" data-page="home">Home</button>
+          <button class="nav-link" data-page="products">Products</button>
+          <button class="nav-link" data-page="contact">Contact</button>
+        </div>
+      </div>
+    </div>
+  </header>
 
-<!-- ===== Designer ===== -->
-<section id="designer">
-  <h2>Designer</h2>
-  <div style="text-align:center;margin-bottom:1rem;">
-    <button onclick="openDesigner('Tee')">Design Tee</button>
-    <button onclick="openDesigner('Hoodie')">Design Hoodie</button>
-  </div>
-</section>
+  <main>
+    <section class="view active" id="homeView">
+      <div class="container hero">
+        <div class="hero-grid">
+          <div class="hero-card hero-main">
+            <div>
+              <div class="eyebrow">Modern apparel designer</div>
+              <h1>Design shirts and hoodies that actually look expensive.</h1>
+              <p>
+                Build a clean storefront for custom apparel with a minimalist layout, premium product cards,
+                and a mobile menu that collapses when the screen gets cramped. Because apparently people want websites
+                to work on phones too.
+              </p>
+              <div class="hero-actions">
+                <button class="btn btn-primary" data-go="products">Browse products</button>
+                <button class="btn btn-secondary" data-go="contact">Contact us</button>
+                <button class="btn btn-secondary" id="googlePreviewBtn">
+                  <span class="google-g" aria-hidden="true"></span>
+                  Continue with Google
+                </button>
+              </div>
 
-<div id="designerModal">
-  <div id="designerContent">
-    <span id="closeDesigner">&times;</span>
-    <canvas id="designCanvas" width="400" height="400"></canvas>
-    <input type="file" id="imageUpload">
-    <button id="saveDesignBtn">Save Design</button>
-  </div>
-</div>
+              <div class="hero-stats">
+                <div class="stat">
+                  <strong>120+</strong>
+                  <span>Design-ready templates</span>
+                </div>
+                <div class="stat">
+                  <strong>3 pages</strong>
+                  <span>Home, Products, Contact</span>
+                </div>
+                <div class="stat">
+                  <strong>Responsive</strong>
+                  <span>Desktop, tablet, and mobile</span>
+                </div>
+              </div>
+            </div>
 
-<!-- ===== Contact ===== -->
-<section id="contact">
-  <h2>Contact Us</h2>
-  <div class="contact-form">
-    <input type="email" placeholder="Your Email">
-    <textarea rows="5" placeholder="Your Message"></textarea>
-    <button>Send Message</button>
-  </div>
-</section>
+            <div class="muted">
+              <strong style="color: var(--text);">Built for a premium feel</strong><br />
+              Smooth gradients, rounded cards, fixed-size images, and a clean layout that stays readable on every device.
+            </div>
+          </div>
 
-<footer>&copy; 2026 Surge. All rights reserved.</footer>
+          <div class="hero-card side-panel">
+            <div class="preview-frame" aria-label="Design preview">
+              <svg viewBox="0 0 400 500" role="img" aria-label="T-shirt mockup">
+                <defs>
+                  <linearGradient id="bggrad" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="50%" stop-color="#eef2ff"/>
+                    <stop offset="100%" stop-color="#ecfeff"/>
+                  </linearGradient>
+                  <linearGradient id="shirtgrad" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#111827"/>
+                    <stop offset="100%" stop-color="#2563eb"/>
+                  </linearGradient>
+                </defs>
+                <rect width="400" height="500" fill="url(#bggrad)"/>
+                <circle cx="320" cy="85" r="52" fill="rgba(37,99,235,0.12)"/>
+                <circle cx="90" cy="430" r="88" fill="rgba(139,92,246,0.12)"/>
+                <path d="M135 120 L170 95 C184 84 216 84 230 95 L265 120 L305 137 L292 202 L275 194 L275 398 C275 412 264 423 250 423 L150 423 C136 423 125 412 125 398 L125 194 L108 202 L95 137 Z"
+                      fill="url(#shirtgrad)" opacity="0.98"/>
+                <path d="M170 95 C184 84 216 84 230 95 L250 137 L150 137 Z" fill="#f8fafc" opacity="0.92"/>
+                <rect x="155" y="215" width="90" height="34" rx="16" fill="rgba(255,255,255,0.12)"/>
+                <text x="200" y="237" fill="#ffffff" font-size="18" font-family="Arial" font-weight="700" text-anchor="middle">SURGE</text>
+                <circle cx="200" cy="300" r="52" fill="rgba(255,255,255,0.1)"/>
+                <path d="M175 300 h50" stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
+                <path d="M200 275 v50" stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
+              </svg>
+            </div>
 
-<script>
-// ===== Navbar Toggle =====
-const hamburger=document.getElementById('hamburger');
-const menu=document.getElementById('menu');
-hamburger.onclick=()=>menu.classList.toggle('show');
-document.querySelectorAll('.nav-link').forEach(link=>link.addEventListener('click',()=>menu.classList.remove('show')));
-function scrollToSection(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+            <div class="mini-list">
+              <div class="mini-item">
+                <div class="mini-thumb">T</div>
+                <div>
+                  <strong>T-shirt templates</strong>
+                  <span>Minimal layout, premium presentation</span>
+                </div>
+              </div>
+              <div class="mini-item">
+                <div class="mini-thumb">H</div>
+                <div>
+                  <strong>Hoodie templates</strong>
+                  <span>Clean product grid with fixed images</span>
+                </div>
+              </div>
+              <div class="mini-item">
+                <div class="mini-thumb">G</div>
+                <div>
+                  <strong>Google sign-in style</strong>
+                  <span>Placeholder button ready for OAuth wiring</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-// ===== Firebase =====
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-const storage = firebase.storage();
+      <div class="container section">
+        <div class="section-head">
+          <div>
+            <h2>Simple. Modern. Functional.</h2>
+            <p class="lead">
+              The site keeps the layout clean while still feeling like a polished storefront.
+              Fancy enough to impress, simple enough that it does not look like it was assembled by a committee.
+            </p>
+          </div>
+        </div>
 
-// ===== Google Sign-In =====
-document.getElementById('googleSignInBtn').addEventListener('click',()=>{
-  const provider=new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider)
-  .then(res=>alert("Signed in: "+res.user.email))
-  .catch(err=>alert("Sign-in failed: "+err.message));
-});
+        <div class="grid-features">
+          <div class="feature">
+            <div class="badge">01</div>
+            <h3>Responsive navigation</h3>
+            <p>Desktop shows full buttons. Mobile switches to a compact collapsible menu with the same links.</p>
+          </div>
+          <div class="feature">
+            <div class="badge">02</div>
+            <h3>Fixed product imagery</h3>
+            <p>Product cards use a consistent image area so nothing grows weirdly big and ruins the layout.</p>
+          </div>
+          <div class="feature">
+            <div class="badge">03</div>
+            <h3>Contact-ready design</h3>
+            <p>A styled contact form and info panel are ready for your email, support text, or whatever else the inbox gods demand.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-// ===== Product Grid =====
-const products=[
-  {name:"Surge Tee",img:"https://via.placeholder.com/300x200?text=Surge+Tee"},
-  {name:"Surge Hoodie",img:"https://via.placeholder.com/300x200?text=Surge+Hoodie"},
-  {name:"Long Sleeve",img:"https://via.placeholder.com/300x200?text=Long+Sleeve"}
-];
-const grid=document.getElementById('productGrid');
-products.forEach(p=>{
-  const div=document.createElement('div');
-  div.className='card';
-  div.innerHTML=`<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><button onclick="openDesigner('${p.name}')">Design</button>`;
-  grid.appendChild(div);
-});
+    <section class="view" id="productsView">
+      <div class="container section">
+        <div class="section-head">
+          <div>
+            <h2>Products</h2>
+            <p class="lead">
+              Template products for shirts and hoodies with fixed-size images and a clean retail feel.
+            </p>
+          </div>
+        </div>
 
-// ===== Designer Modal =====
-const designerModal=document.getElementById('designerModal');
-const closeDesigner=document.getElementById('closeDesigner');
-const canvas=document.getElementById('designCanvas');
-const ctx=canvas.getContext('2d');
-let currentProduct='';
+        <div class="products-toolbar">
+          <div class="searchbar" role="search">
+            <span aria-hidden="true">⌕</span>
+            <input id="productSearch" type="text" placeholder="Search products by name or style..." />
+          </div>
 
-function openDesigner(product){
-  currentProduct=product;
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle='#fff';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  designerModal.style.display='flex';
-}
-closeDesigner.onclick=()=>designerModal.style.display='none';
-window.onclick=e=>{if(e.target==designerModal)designerModal.style.display='none';}
+          <div class="chip-row" aria-label="Filter products">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="shirts">T-Shirts</button>
+            <button class="chip" data-filter="hoodies">Hoodies</button>
+            <button class="chip" data-filter="premium">Premium</button>
+          </div>
+        </div>
 
-// ===== Image Upload =====
-document.getElementById('imageUpload').addEventListener('change',function(e){
-  const file=e.target.files[0];
-  if(file){
-    const reader=new FileReader();
-    reader.onload=function(event){
-      const img=new Image();
-      img.onload=function(){ctx.drawImage(img,50,50,300,300);}
-      img.src=event.target.result;
+        <div class="products-grid" id="productGrid">
+          <article class="product-card" data-category="shirts premium" data-name="Essential Black Tee">
+            <div class="product-image">
+              <img alt="Essential Black Tee" src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1200&q=80" />
+            </div>
+            <div class="product-body">
+              <div class="product-top">
+                <h3>Essential Black Tee</h3>
+                <div class="price">$24</div>
+              </div>
+              <p>Heavyweight cotton, clean fit, and a design area that stays nice and centered. Very civilized.</p>
+              <div class="swatches" aria-label="Color swatches">
+                <span class="swatch" style="background:#111827"></span>
+                <span class="swatch" style="background:#f9fafb"></span>
+                <span class="swatch" style="background:#1d4ed8"></span>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-primary">Customize</button>
+                <button class="btn btn-secondary">Preview</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="shirts" data-name="Streetwear White Tee">
+            <div class="product-image">
+              <img alt="Streetwear White Tee" src="https://images.unsplash.com/photo-1503341504253-dff4815485f1?auto=format&fit=crop&w=1200&q=80" />
+            </div>
+            <div class="product-body">
+              <div class="product-top">
+                <h3>Streetwear White Tee</h3>
+                <div class="price">$22</div>
+              </div>
+              <p>Bright white base with a modern oversized feel. Great for logos, artwork, and small branding.</p>
+              <div class="swatches">
+                <span class="swatch" style="background:#ffffff"></span>
+                <span class="swatch" style="background:#d1d5db"></span>
+                <span class="swatch" style="background:#0f766e"></span>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-primary">Customize</button>
+                <button class="btn btn-secondary">Preview</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="hoodies premium" data-name="Midnight Hoodie">
+            <div class="product-image">
+              <img alt="Midnight Hoodie" src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=1200&q=80" />
+            </div>
+            <div class="product-body">
+              <div class="product-top">
+                <h3>Midnight Hoodie</h3>
+                <div class="price">$48</div>
+              </div>
+              <p>Soft fleece hoodie with a structured fit and deep print area. Looks expensive without trying too hard.</p>
+              <div class="swatches">
+                <span class="swatch" style="background:#111827"></span>
+                <span class="swatch" style="background:#1f2937"></span>
+                <span class="swatch" style="background:#7c3aed"></span>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-primary">Customize</button>
+                <button class="btn btn-secondary">Preview</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="hoodies" data-name="Cloud Grey Hoodie">
+            <div class="product-image">
+              <img alt="Cloud Grey Hoodie" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80" />
+            </div>
+            <div class="product-body">
+              <div class="product-top">
+                <h3>Cloud Grey Hoodie</h3>
+                <div class="price">$44</div>
+              </div>
+              <p>A muted neutral hoodie for sleek branding and easy matching with just about anything.</p>
+              <div class="swatches">
+                <span class="swatch" style="background:#e5e7eb"></span>
+                <span class="swatch" style="background:#9ca3af"></span>
+                <span class="swatch" style="background:#2563eb"></span>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-primary">Customize</button>
+                <button class="btn btn-secondary">Preview</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="shirts premium" data-name="Premium Oversized Tee">
+            <div class="product-image">
+              <img alt="Premium Oversized Tee" src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80" />
+            </div>
+            <div class="product-body">
+              <div class="product-top">
+                <h3>Premium Oversized Tee</h3>
+                <div class="price">$36</div>
+              </div>
+              <p>Designed for modern streetwear brands. Boxy shape, premium fabric, and a strong print presentation.</p>
+              <div class="swatches">
+                <span class="swatch" style="background:#111827"></span>
+                <span class="swatch" style="background:#f97316"></span>
+                <span class="swatch" style="background:#8b5cf6"></span>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-primary">Customize</button>
+                <button class="btn btn-secondary">Preview</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-category="hoodies premium" data-name="Luxury Zip Hoodie">
+            <div class="product-image">
+              <img alt="Luxury Zip Hoodie" src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1200&q=80" />
+            </div>
+            <div class="product-body">
+              <div class="product-top">
+                <h3>Luxury Zip Hoodie</h3>
+                <div class="price">$54</div>
+              </div>
+              <p>A polished zip-up option with room for chest branding and back graphics. Clean and premium.</p>
+              <div class="swatches">
+                <span class="swatch" style="background:#0f172a"></span>
+                <span class="swatch" style="background:#334155"></span>
+                <span class="swatch" style="background:#16a34a"></span>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-primary">Customize</button>
+                <button class="btn btn-secondary">Preview</button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="designer-banner">
+          <div>
+            <h3 style="margin:0; font-size:1.4rem; letter-spacing:-0.04em;">Build your own apparel line</h3>
+            <p>
+              Add logos, custom text, artwork placement, and color variations. The UI is structured so you can turn it
+              into a real designer later without having to burn the whole thing down and start over.
+            </p>
+          </div>
+          <div>
+            <button class="btn btn-primary">Start Designing</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="contactView">
+      <div class="container section">
+        <div class="section-head">
+          <div>
+            <h2>Contact</h2>
+            <p class="lead">
+              Use this page for email, support, or order questions. Add your real backend later if you want the form to do more than look elegant.
+            </p>
+          </div>
+        </div>
+
+        <div class="contact-layout">
+          <div class="card">
+            <div class="card-pad">
+              <form class="form-grid">
+                <div class="field">
+                  <label for="name">Full name</label>
+                  <input id="name" type="text" placeholder="Your name" />
+                </div>
+
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input id="email" type="email" placeholder="you@example.com" />
+                </div>
+
+                <div class="field">
+                  <label for="subject">Subject</label>
+                  <select id="subject">
+                    <option>General inquiry</option>
+                    <option>Order question</option>
+                    <option>Custom design request</option>
+                    <option>Support</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="message">Message</label>
+                  <textarea id="message" placeholder="Write your message here..."></textarea>
+                </div>
+
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                  <button type="button" class="btn btn-primary">Send message</button>
+                  <button type="button" class="btn btn-secondary">Email us</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="contact-info">
+            <div class="card">
+              <div class="card-pad">
+                <h3 style="margin-top:0;">Contact details</h3>
+                <div class="info-item">
+                  <div class="info-icon">✉</div>
+                  <div>
+                    <strong>Email</strong>
+                    <span>support@surge.com</span>
+                  </div>
+                </div>
+                <div class="info-item" style="margin-top:12px;">
+                  <div class="info-icon">☎</div>
+                  <div>
+                    <strong>Phone</strong>
+                    <span>(555) 012-3456</span>
+                  </div>
+                </div>
+                <div class="info-item" style="margin-top:12px;">
+                  <div class="info-icon">⌂</div>
+                  <div>
+                    <strong>Studio</strong>
+                    <span>Design requests and fulfillment happen from wherever the internet is being least annoying.</span>
+                  </div>
+                </div>
+
+                <div class="google-box">
+                  <strong>Google account option</strong>
+                  <span class="muted">This is a styled sign-in placeholder. Real Google login needs OAuth setup, not just a button and optimism.</span>
+                  <button class="google-btn" type="button" id="googleContactBtn">
+                    <span class="google-g" aria-hidden="true"></span>
+                    Continue with Google
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-pad">
+                <h3 style="margin-top:0;">Business hours</h3>
+                <p class="muted" style="line-height:1.8; margin-bottom:0;">
+                  Monday - Friday: 9:00 AM - 6:00 PM<br />
+                  Saturday: 10:00 AM - 4:00 PM<br />
+                  Sunday: Closed
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <small>
+        © 2026 Surge. Custom t-shirt and hoodie designer.
+      </small>
+      <div class="footer-links">
+        <a href="#home" data-go="home">Home</a>
+        <a href="#products" data-go="products">Products</a>
+        <a href="#contact" data-go="contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const views = {
+      home: document.getElementById('homeView'),
+      products: document.getElementById('productsView'),
+      contact: document.getElementById('contactView')
+    };
+
+    const navButtons = document.querySelectorAll('[data-page]');
+    const goButtons = document.querySelectorAll('[data-go]');
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobilePanel = document.getElementById('mobilePanel');
+    const productSearch = document.getElementById('productSearch');
+    const productCards = [...document.querySelectorAll('.product-card')];
+    const chips = document.querySelectorAll('.chip');
+
+    function setActiveNav(page) {
+      navButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.page === page);
+      });
     }
-    reader.readAsDataURL(file);
-  }
-});
 
-// ===== Save Design =====
-document.getElementById('saveDesignBtn').addEventListener('click',()=>{
-  if(!auth.currentUser){alert('Sign in first'); return;}
-  canvas.toBlob(blob=>{
-    const storageRef=storage.ref().child(`designs/${auth.currentUser.uid}/${Date.now()}.png`);
-    storageRef.put(blob).then(()=>alert('Design saved!'));
-  });
-});
-</script>
+    function showView(page) {
+      Object.entries(views).forEach(([key, el]) => {
+        el.classList.toggle('active', key === page);
+      });
+
+      setActiveNav(page);
+      mobilePanel.classList.remove('open');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      history.replaceState(null, '', '#' + page);
+    }
+
+    function pageFromHash() {
+      const hash = (location.hash || '#home').replace('#', '');
+      return views[hash] ? hash : 'home';
+    }
+
+    function filterProducts() {
+      const query = productSearch.value.trim().toLowerCase();
+      const activeChip = document.querySelector('.chip.active')?.dataset.filter || 'all';
+
+      productCards.forEach(card => {
+        const name = (card.dataset.name || '').toLowerCase();
+        const category = (card.dataset.category || '').toLowerCase();
+        const matchesSearch = !query || name.includes(query) || category.includes(query);
+        const matchesChip = activeChip === 'all' || category.includes(activeChip);
+
+        card.classList.toggle('hidden', !(matchesSearch && matchesChip));
+      });
+    }
+
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', () => showView(btn.dataset.page));
+    });
+
+    goButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const page = btn.dataset.go;
+        if (views[page]) showView(page);
+      });
+    });
+
+    mobileToggle.addEventListener('click', () => {
+      mobilePanel.classList.toggle('open');
+    });
+
+    window.addEventListener('hashchange', () => {
+      showView(pageFromHash());
+    });
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        filterProducts();
+      });
+    });
+
+    productSearch?.addEventListener('input', filterProducts);
+
+    document.getElementById('googlePreviewBtn')?.addEventListener('click', () => {
+      alert('Google sign-in placeholder. Real OAuth requires a client ID and backend configuration.');
+    });
+
+    document.getElementById('googleContactBtn')?.addEventListener('click', () => {
+      alert('Google sign-in placeholder. Real Google account login needs OAuth setup.');
+    });
+
+    document.addEventListener('click', (e) => {
+      const clickedInsideNav = e.target.closest('.topbar');
+      const clickedMobileToggle = e.target.closest('#mobileToggle');
+      if (!clickedInsideNav && mobilePanel.classList.contains('open') && !clickedMobileToggle) {
+        mobilePanel.classList.remove('open');
+      }
+    });
+
+    showView(pageFromHash());
+  </script>
 </body>
 </html>
