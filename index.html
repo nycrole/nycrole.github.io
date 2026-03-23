@@ -903,16 +903,20 @@
         padding: 22px;
       }
     }
+    .brand-logo {
+  width: 120px;   /* fixed width */
+  height: auto;   /* maintain aspect ratio */
+  display: block; /* remove inline spacing issues */
+}
   </style>
 </head>
 <body>
   <header class="topbar">
     <div class="container">
       <div class="nav-wrap">
-        <a href="#home" class="brand" data-nav="home" aria-label="Surge home">
-          <span class="brand-mark">S</span>
-          <span>Surge</span>
-        </a>
+<a href="#home" class="brand" data-nav="home" aria-label="Surge home">
+  <img src="https://i.postimg.cc/J4y30mY8/Surge-Logo.png" alt="Surge" class="brand-logo">
+</a>
 
         <nav class="nav-actions" aria-label="Main navigation">
           <div class="nav-links" id="desktopNav">
